@@ -13,7 +13,13 @@ class SignupForm extends Model
 {
     public $username;
     public $email;
+    public $phone;
+    public $fullname;
     public $password;
+    public $re_password;
+    public $verifyCode;
+    
+    public $agree_rule;
 
 
     /**
@@ -22,21 +28,54 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
+            ['username', 'filter', 'filter' => 'trim'],
+            ['username', 'required', 'message' => 'กรุณากรอก {attribute}'],
+            ['username', 'match', 'pattern' => '/^[a-z]\w*$/i', 'message' => 'ห้ามใช้อักขระพิเศษ และมีช่องว่าง ท่านสามารถใช้ a-z และ 0-9 ได้เท่านั้น'],
+            //['username', 'unique'],
+            ['username', 'unique', 'targetClass' => 'common\models\User', 'message' => 'Username นี้ถูกใช้ไปแล้ว'],
+            ['username', 'string', 'min' => 6, 'max' => 14],
 
-            ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
+            ['email', 'filter', 'filter' => 'trim'],
+            ['email', 'required', 'message' => 'กรุณากรอก {attribute}'],
+            ['email', 'email', 'message' => 'กรุณากรอกรูปแบบ {attribute} ให้ถูกต้อง'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => 'common\models\User', 'message' => 'Email นี้ถูกใช้ไปแล้ว'],
 
-            ['password', 'required'],
-            ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
+            ['password', 'required', 'message' => 'กรุณากรอก {attribute}'],
+            ['password', 'string', 'min' => 8, 'max' => 18],
+            
+            ['re_password', 'required', 'message' => 'กรุณากรอก {attribute}'],
+            ['re_password','compare','compareAttribute'=>'password', 'message' => 'กรุณากรอก {attribute} ให้ตรงกับ รหัสผ่าน'],
+            
+            ['verifyCode', 'captcha'],
+            
+            //['username', 'allowUser'],
+            
+            ['agree_rule', 'required', 'message' => 'ท่านต้องยอมรับเงื่อนไขการใช้งาน'],
         ];
     }
+    
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'ชื่อผู้ใช้',
+            'password' => 'รหัสผ่าน',
+            'email' => 'อีเมล์',
+            're_password' => 'ยืนยันรหัสผ่าน',
+            'verifyCode' => 'Verification Code',
+        ];
+    }
+    
+    /*public function allowUser($attribute, $params) {
+        $model = MainDataModel::find()->where(['type'=>'allowuser'])->one();
+        $not = explode(',', $model->content);
+        foreach ($not as $value) {
+            if(is_numeric(strpos($this->$attribute, $value))){
+                $this->addError($attribute, 'คุณไม่สามารถใช้งาน Username ชื่อนี้ได้.');
+            }
+            
+        }
+    }*/
 
     /**
      * Signs user up.
@@ -55,8 +94,17 @@ class SignupForm extends Model
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
+        
+        $user->username = $this->username;
+        $user->email = $this->email;
+        //$user->phone = $this->phone;
+        //$user->created_at = date('Y-m-d H:i:s');
+        $user->ip = Yii::$app->request->getUserIP();
 
-        return $user->save() && $this->sendEmail($user);
+        if ($user->save()) {
+            return $user;
+        }
+        return null;
     }
 
     /**

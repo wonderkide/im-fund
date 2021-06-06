@@ -1,0 +1,16 @@
+/* 
+    Created on : Jun 6, 2021, 1:36:33 PM
+    Author     : wonderkide
+*/
+
+@font-face {
+    font-family: kanit;
+    src:url('../fonts/Kanit/Kanit-Regular.ttf') format('truetype'); 
+}
+
+.font-kanit{
+    font-family: kanit !important;
+}
+.font-mitr{
+    font-family: mitr;
+}

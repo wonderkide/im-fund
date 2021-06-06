@@ -1,0 +1,95 @@
+.upload-demo .upload-demo-wrap,
+.upload-demo .upload-result,
+.upload-demo.ready .upload-msg {
+    display: none;
+}
+.upload-demo.ready .upload-demo-wrap {
+    display: block;
+}
+.upload-demo.ready .upload-result {
+    display: inline-block;    
+}
+.upload-demo-wrap {
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+}
+
+.upload-msg {
+    text-align: center;
+    
+    font-size: 22px;
+    color: #aaa;
+    width: 150px;
+    height: 150px;
+    /*border: 1px solid #aaa;*/
+    border-radius: 50%;
+    margin: 0 auto;
+}
+.upload-msg img{
+    border-radius: 50%;
+}
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.btn-upload {
+    border: 2px solid gray;
+    color: gray;
+    background-color: white;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+.upload-btn-wrapper-modal input[type=file] {
+    display: none;
+}
+.upload-btn-wrapper-modal label {
+    cursor: pointer;
+    /*border: 2px solid gray;*/
+    color: gray;
+    /*background-color: white;*/
+    /*padding: 5px 10px;*/
+    /*border-radius: 8px;*/
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0 50px;
+}
+.actions{
+    text-align: center;
+    margin: 15px 0;
+}
+.upload-demo.ready{
+    margin-bottom: 50px;
+}
+#ProfileImageModal{
+    padding-right: 0 !important;
+    
+}
+#ProfileImageModal .modal-dialog{
+    top: 25%;
+}
+
+@media handheld, only screen and (max-width: 767px) {
+    .container, 
+    .section-header h2 {
+        min-width: 0;
+    }
+
+    .croppie-container {
+        padding: 30px 0;
+    }
+}

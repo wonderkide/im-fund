@@ -11,7 +11,9 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'timeZone' => 'Asia/Bangkok',
     'components' => [
+        'db' => require(__DIR__ . '/../../common/config/db.php'),
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
@@ -36,14 +38,23 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
-            'enablePrettyUrl' => true,
+            'class' => 'yii\web\UrlManager',
             'showScriptName' => false,
-            'rules' => [
+            'enablePrettyUrl' => true,
+        ],
+        'view' => [
+            'theme' => [
+                'pathMap' => [
+                    '@app/views' => '@app/themes/gp/views',
+                    //'@app/views' => '@app/themes/adminlte3/views'
+                ],
             ],
         ],
-        */
     ],
     'params' => $params,
+    'aliases' => [
+        '@themeAsset' => '@frontend/themes/adminlte3/assets',
+        '@GpAsset' => '@frontend/themes/gp/assets',
+    ],
 ];
