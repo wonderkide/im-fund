@@ -20,8 +20,6 @@ GpAsset::register($this);
 
     <?php $this->registerCsrfMetaTags() ?>
     <title>FUND MEMORIES</title>
-    <meta name="title" content="FUND MEMORIES ระบบจัดการเรื่องเงิน">
-    <meta name="description" content="ออกแบบ ทำรายงาน วิเคราห์และเปรียบเทียบ ข้อมูลการเงิน การลงทุน ตามสไตล์ตัวเองได้อย่างง่ายดาย">
     <?php $this->head() ?>
 </head>
 <body class="d-flex flex-column ">

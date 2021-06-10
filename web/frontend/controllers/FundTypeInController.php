@@ -2,19 +2,16 @@
 
 namespace frontend\controllers;
 
-use common\models\Fund;
-use common\models\FundSearch;
+use common\models\FundTypeIn;
+use common\models\FundTypeInSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-use yii\filters\AccessControl;
-use frontend\components\MyController;
-
 /**
- * FundController implements the CRUD actions for Fund model.
+ * FundTypeInController implements the CRUD actions for FundTypeIn model.
  */
-class FundController extends MyController
+class FundTypeInController extends Controller
 {
     /**
      * @inheritDoc
@@ -30,32 +27,17 @@ class FundController extends MyController
                         'delete' => ['POST'],
                     ],
                 ],
-                'access' => [
-                    'class' => AccessControl::className(),
-                    'rules' => [
-                        [
-                            'allow' => true,
-                            'roles' => ['@'],
-                        ],
-                    ],
-                ],
             ]
         );
     }
-    
-    public function beforeAction($action)
-    {
-        $this->layout = '@app/themes/adminlte3/views/layouts/main';
-        return parent::beforeAction($action);
-    }
 
     /**
-     * Lists all Admin models.
+     * Lists all FundTypeIn models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new FundSearch();
+        $searchModel = new FundTypeInSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -65,7 +47,7 @@ class FundController extends MyController
     }
 
     /**
-     * Displays a single Fund model.
+     * Displays a single FundTypeIn model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -78,13 +60,13 @@ class FundController extends MyController
     }
 
     /**
-     * Creates a new Fund model.
+     * Creates a new FundTypeIn model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Fund();
+        $model = new FundTypeIn();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -100,7 +82,7 @@ class FundController extends MyController
     }
 
     /**
-     * Updates an existing Fund model.
+     * Updates an existing FundTypeIn model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -120,7 +102,7 @@ class FundController extends MyController
     }
 
     /**
-     * Deletes an existing Fund model.
+     * Deletes an existing FundTypeIn model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -134,15 +116,15 @@ class FundController extends MyController
     }
 
     /**
-     * Finds the Fund model based on its primary key value.
+     * Finds the FundTypeIn model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Fund the loaded model
+     * @return FundTypeIn the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Fund::findOne($id)) !== null) {
+        if (($model = FundTypeIn::findOne($id)) !== null) {
             return $model;
         }
 
