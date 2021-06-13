@@ -7,15 +7,16 @@ use yii\grid\GridView;
 /* @var $searchModel common\models\FundInvestSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Fund Invests';
+$this->title = 'จัดการพอร์ต';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fund-invest-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Create Fund Invest', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('<i class="fa fa-plus-circle"></i> เพิ่ม', null, [
+            'class' => 'btn btn-success activity-create-link text-light',
+            'data-title' => 'เพิ่มพอร์ต',
+        ]) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -28,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'user_id',
-            'fund_id',
+            'name',
             'present_value',
             'cost_value',
             //'present_nav',

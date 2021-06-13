@@ -60,6 +60,21 @@ class SiteController extends MyController
             ],
         ];
     }
+    
+    public function beforeAction( $action ) {
+        /*if(!Yii::$app->user->isGuest){
+            return $this->redirect(['member/index']);
+        }
+        if($action->id == 'login'){
+            $this->enableCsrfValidation = false;
+        }*/
+        if ( parent::beforeAction ( $action ) ) {
+            if ( $action->id == 'error') {
+                $this->layout = 'none';
+            }
+            return true;
+        } 
+    }
 
     /**
      * Displays homepage.

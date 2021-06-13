@@ -5,11 +5,11 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "fund_invest".
+ * This is the model class for table "fund_port".
  *
  * @property int $id
  * @property int|null $user_id
- * @property int|null $fund_id
+ * @property string $name
  * @property float $present_value
  * @property float $cost_value
  * @property float $present_nav
@@ -22,14 +22,14 @@ use Yii;
  * @property FundInvestDetail[] $fundInvestDetails
  * @property User $user
  */
-class FundInvest extends \yii\db\ActiveRecord
+class FundPort extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'fund_invest';
+        return 'fund_port';
     }
 
     /**
@@ -38,11 +38,11 @@ class FundInvest extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'fund_id'], 'integer'],
+            [['user_id'], 'integer'],
+            [['name'], 'string', 'max' => 255],
             [['present_value', 'cost_value', 'present_nav', 'cost_nav', 'units'], 'number'],
-            [['created_at'], 'required'],
+            [['created_at', 'name'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
-            [['fund_id'], 'exist', 'skipOnError' => true, 'targetClass' => Fund::className(), 'targetAttribute' => ['fund_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -55,7 +55,6 @@ class FundInvest extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'fund_id' => 'Fund ID',
             'present_value' => 'Present Value',
             'cost_value' => 'Cost Value',
             'present_nav' => 'Present Nav',
@@ -67,23 +66,13 @@ class FundInvest extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Fund]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getFund()
-    {
-        return $this->hasOne(Fund::className(), ['id' => 'fund_id']);
-    }
-
-    /**
      * Gets query for [[FundInvestDetails]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFundInvestDetails()
+    public function getFundPortDetails()
     {
-        return $this->hasMany(FundInvestDetail::className(), ['fund_invest_id' => 'id']);
+        return $this->hasMany(FundPortDetail::className(), ['fund_port_id' => 'id']);
     }
 
     /**

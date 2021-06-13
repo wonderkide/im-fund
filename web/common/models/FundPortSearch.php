@@ -4,12 +4,11 @@ namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\FundInvest;
 
 /**
  * FundInvestSearch represents the model behind the search form of `common\models\FundInvest`.
  */
-class FundInvestSearch extends FundInvest
+class FundPortSearch extends FundPort
 {
     /**
      * {@inheritdoc}
@@ -17,9 +16,9 @@ class FundInvestSearch extends FundInvest
     public function rules()
     {
         return [
-            [['id', 'user_id', 'fund_id'], 'integer'],
+            [['id', 'user_id'], 'integer'],
             [['present_value', 'cost_value', 'present_nav', 'cost_nav', 'units'], 'number'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', 'name'], 'safe'],
         ];
     }
 
@@ -41,7 +40,7 @@ class FundInvestSearch extends FundInvest
      */
     public function search($params)
     {
-        $query = FundInvest::find();
+        $query = FundPort::find();
 
         // add conditions that should always apply here
 
@@ -61,7 +60,6 @@ class FundInvestSearch extends FundInvest
         $query->andFilterWhere([
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'fund_id' => $this->fund_id,
             'present_value' => $this->present_value,
             'cost_value' => $this->cost_value,
             'present_nav' => $this->present_nav,
@@ -70,6 +68,7 @@ class FundInvestSearch extends FundInvest
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

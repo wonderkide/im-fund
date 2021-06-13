@@ -2,20 +2,22 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\FundSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Funds';
+$this->title = 'รายชื่อกองทุน';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fund-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Create Fund', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('<i class="fa fa-plus-circle"></i> เพิ่ม', null, [
+            'class' => 'btn btn-success activity-create-link text-light',
+            'data-title' => 'เพิ่มกองทุน',
+        ]) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -26,13 +28,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'user_id',
             'fund_type_id',
-            'fund_type_in_id',
             'asset_management_id',
-            //'name',
-            //'name_th',
+            'name',
+            'name_th',
             //'risk',
             //'feeder_fund',
             //'currency_policy',
@@ -52,3 +51,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 </div>
+<?php
+$url_set_status = Url::to(['ajax_update_status']);
+$script = <<< JS
+        /*$('#table-dt').DataTable( {
+            'lengthMenu': [[100,250,500,-1],[100,250,500,'All']],
+            'language': {
+                'url': 'dataTables.thai.lang'
+            },
+            'columnDefs': [
+                { targets: 'no-sort', orderable: false, order: []},
+            ]
+        } );
+        
+        function set_status(id){
+            jQuery.post("$url_set_status", {ids: id}, 
+                function (data) {
+                });
+        }*/
+        
+JS;
+$this->registerJs($script);
+?>

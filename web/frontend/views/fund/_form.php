@@ -1,7 +1,11 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
+use yii\helpers\ArrayHelper;
+use common\models\FundType;
+use common\models\FundTypeIn;
+use common\models\AssetManagement;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Fund */
@@ -10,15 +14,17 @@ use yii\widgets\ActiveForm;
 
 <div class="fund-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+                    'id' => 'activeForm',
+                    'enableAjaxValidation' => TRUE,
+                    'options' => ['data-pjax' => false],
+        ]); ?>
 
-    <?= $form->field($model, 'user_id')->textInput() ?>
+    <?= $form->field($model, 'fund_type_id')->dropDownList(ArrayHelper::map(FundType::find()->all(), 'id', 'name'), ['prompt' => ' -- เลือก -- ']) ?>
 
-    <?= $form->field($model, 'fund_type_id')->textInput() ?>
+    <?= $form->field($model, 'fund_type_in_id')->radioList(ArrayHelper::map(FundTypeIn::find()->all(), 'id', 'name')) ?>
 
-    <?= $form->field($model, 'fund_type_in_id')->textInput() ?>
-
-    <?= $form->field($model, 'asset_management_id')->textInput() ?>
+    <?= $form->field($model, 'asset_management_id')->dropDownList(ArrayHelper::map(AssetManagement::find()->all(), 'id', 'name_en'), ['prompt' => ' -- เลือก -- ']) ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
@@ -28,9 +34,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'feeder_fund')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'currency_policy')->textInput() ?>
+    <?= $form->field($model, 'currency_policy')->radioList($model->currencyPolicyList) ?>
 
-    <?= $form->field($model, 'dividend')->textInput() ?>
+    <?= $form->field($model, 'dividend')->radioList([0 => 'ไม่จ่าย', 1 => 'จ่าย']) ?>
 
     <?= $form->field($model, 'frontend_fee')->textInput(['maxlength' => true]) ?>
 

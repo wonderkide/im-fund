@@ -4,12 +4,12 @@ namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\FundInvestDetail;
+use common\models\FundPortDetail;
 
 /**
- * FundInvestDetailSearch represents the model behind the search form of `common\models\FundInvestDetail`.
+ * FundPortDetailSearch represents the model behind the search form of `common\models\FundPortDetail`.
  */
-class FundInvestDetailSearch extends FundInvestDetail
+class FundPortDetailSearch extends FundPortDetail
 {
     /**
      * {@inheritdoc}
@@ -17,7 +17,7 @@ class FundInvestDetailSearch extends FundInvestDetail
     public function rules()
     {
         return [
-            [['id', 'fund_id', 'fund_invest_id', 'type', 'status'], 'integer'],
+            [['id', 'fund_id', 'fund_port_id', 'type', 'status'], 'integer'],
             [['date', 'created_at'], 'safe'],
             [['nav', 'amount', 'units'], 'number'],
         ];
@@ -41,7 +41,7 @@ class FundInvestDetailSearch extends FundInvestDetail
      */
     public function search($params)
     {
-        $query = FundInvestDetail::find();
+        $query = FundPortDetail::find();
 
         // add conditions that should always apply here
 
@@ -61,7 +61,7 @@ class FundInvestDetailSearch extends FundInvestDetail
         $query->andFilterWhere([
             'id' => $this->id,
             'fund_id' => $this->fund_id,
-            'fund_invest_id' => $this->fund_invest_id,
+            'fund_port_id' => $this->fund_port_id,
             'date' => $this->date,
             'nav' => $this->nav,
             'amount' => $this->amount,

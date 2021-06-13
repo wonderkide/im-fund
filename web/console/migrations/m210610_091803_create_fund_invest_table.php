@@ -12,10 +12,10 @@ class m210610_091803_create_fund_invest_table extends Migration
      */
     public function safeUp()
     {
-        $this->createTable('{{%fund_invest}}', [
+        $this->createTable('{{%fund_port}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->null(),
-            'fund_id' => $this->integer()->null(),
+            'name' => $this->string()->notNull(),
             'present_value' => $this->double()->notNull()->defaultValue(0),
             'cost_value' => $this->double()->notNull()->defaultValue(0),
             'present_nav' => $this->double()->notNull()->defaultValue(0),
@@ -25,8 +25,7 @@ class m210610_091803_create_fund_invest_table extends Migration
             'updated_at' => $this->dateTime()->null(),
         ]);
         
-        $this->addForeignKey("fk-fund_invest-user_id", 'fund_invest', 'user_id', 'user', 'id', 'SET NULL');
-        $this->addForeignKey("fk-fund_invest-fund_id", 'fund_invest', 'fund_id', 'fund', 'id', 'SET NULL');
+        $this->addForeignKey("fk-fund_port-user_id", 'fund_port', 'user_id', 'user', 'id', 'SET NULL');
     }
 
     /**
@@ -34,6 +33,6 @@ class m210610_091803_create_fund_invest_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%fund_invest}}');
+        $this->dropTable('{{%fund_port}}');
     }
 }

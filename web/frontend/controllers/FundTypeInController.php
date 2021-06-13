@@ -8,10 +8,13 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use yii\filters\AccessControl;
+use frontend\components\AdminLteController;
+
 /**
  * FundTypeInController implements the CRUD actions for FundTypeIn model.
  */
-class FundTypeInController extends Controller
+class FundTypeInController extends AdminLteController
 {
     /**
      * @inheritDoc
@@ -25,6 +28,15 @@ class FundTypeInController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                    ],
+                ],
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
                     ],
                 ],
             ]

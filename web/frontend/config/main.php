@@ -7,6 +7,7 @@ $params = array_merge(
 );
 
 return [
+    'name' => 'FUND MEMORIES',
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -21,6 +22,7 @@ return [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
+            'loginUrl' => '/',
         ],
         'session' => [
             // this is the name of the session cookie used for login on the frontend
@@ -54,7 +56,7 @@ return [
     ],
     'params' => $params,
     'aliases' => [
-        '@themeAsset' => '@frontend/themes/adminlte3/assets',
+        '@LteAsset' => '@frontend/themes/adminlte3/assets',
         '@GpAsset' => '@frontend/themes/gp/assets',
     ],
 ];

@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\FundInvest */
@@ -10,11 +10,15 @@ use yii\widgets\ActiveForm;
 
 <div class="fund-invest-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+                    'id' => 'activeForm',
+                    'enableAjaxValidation' => TRUE,
+                    'options' => ['data-pjax' => false],
+        ]); ?>
 
     <?= $form->field($model, 'user_id')->textInput() ?>
 
-    <?= $form->field($model, 'fund_id')->textInput() ?>
+    <?= $form->field($model, 'name')->textInput() ?>
 
     <?= $form->field($model, 'present_value')->textInput() ?>
 

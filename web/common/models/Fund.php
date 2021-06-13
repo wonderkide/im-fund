@@ -50,7 +50,7 @@ class Fund extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'fund_type_id', 'fund_type_in_id', 'asset_management_id', 'risk', 'currency_policy', 'dividend'], 'integer'],
-            [['name', 'risk', 'dividend'], 'required'],
+            [['user_id', 'fund_type_id', 'fund_type_in_id', 'asset_management_id','name', 'risk', 'dividend'], 'required'],
             [['frontend_fee', 'backend_fee', 'fee', 'first_invest', 'invest', 'net_asset_value'], 'number'],
             [['registration_date'], 'safe'],
             [['detail'], 'string'],
@@ -68,24 +68,24 @@ class Fund extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'User ID',
-            'fund_type_id' => 'Fund Type ID',
-            'fund_type_in_id' => 'Fund Type In ID',
-            'asset_management_id' => 'Asset Management ID',
-            'name' => 'Name',
-            'name_th' => 'Name Th',
-            'risk' => 'Risk',
+            'user_id' => 'ผู้ใช้งาน',
+            'fund_type_id' => 'ประเภท',
+            'fund_type_in_id' => 'ประเภทกองทุน',
+            'asset_management_id' => 'บลจ.',
+            'name' => 'รหัสกองทุน',
+            'name_th' => 'ชื่อกองทุน',
+            'risk' => 'ความเสี่ยง',
             'feeder_fund' => 'Feeder Fund',
-            'currency_policy' => 'Currency Policy',
-            'dividend' => 'Dividend',
-            'frontend_fee' => 'Frontend Fee',
-            'backend_fee' => 'Backend Fee',
-            'fee' => 'Fee',
-            'first_invest' => 'First Invest',
-            'invest' => 'Invest',
-            'registration_date' => 'Registration Date',
-            'net_asset_value' => 'Net Asset Value',
-            'detail' => 'Detail',
+            'currency_policy' => 'นโยบายค่าเงิน',
+            'dividend' => 'นโยบายจ่ายปัยผล',
+            'frontend_fee' => 'ค่าธรรมเนียมขาย',
+            'backend_fee' => 'ค่าธรรมเนียมซื้อ',
+            'fee' => 'ค่าจัดการ',
+            'first_invest' => 'ลงทุนครั้งแรก',
+            'invest' => 'ลงทุนครั้งต่อไป',
+            'registration_date' => 'วันจดทะเบียน',
+            'net_asset_value' => 'มูลค่ากอง',
+            'detail' => 'รายละเอียดเพิ่มเติม',
         ];
     }
 
@@ -137,5 +137,15 @@ class Fund extends \yii\db\ActiveRecord
     public function getFundTypeIn()
     {
         return $this->hasOne(FundTypeIn::className(), ['id' => 'fund_type_in_id']);
+    }
+    
+    public function getCurrencyPolicyList(){
+        $arr = [
+            1 => 'ป้องกัน',
+            2 => 'ไม่ป้องกัน',
+            3 => 'ป้องกันบางส่วน',
+            4 => 'ดุลพินิจ	',
+        ];
+        return $arr;
     }
 }

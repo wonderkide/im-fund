@@ -89,11 +89,11 @@ class m210607_130019_create_asset_management_table extends Migration
         ]);
         $this->insert('asset_management', [
             'name_th' => 'เรนเนสซานซ์',
-            'name_en' => 'LHFUND'
+            'name_en' => 'RENAISSANCE'
         ]);
         $this->insert('asset_management', [
             'name_th' => 'แลนด์ แอนด์ เฮ้าส์',
-            'name_en' => ''
+            'name_en' => 'LHFUND'
         ]);
         $this->insert('asset_management', [
             'name_th' => 'ยูโอบี',
@@ -109,7 +109,7 @@ class m210607_130019_create_asset_management_table extends Migration
         ]);
         $this->insert('asset_management', [
             'name_th' => 'สยาม ไนท์ ฟันด์ แมเนจเม้นท์',
-            'name_en' => ''
+            'name_en' => 'SKFM'
         ]);
         $this->insert('asset_management', [
             'name_th' => 'วี',

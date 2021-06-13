@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use yii\helpers\Html;
+use yii\bootstrap4\Modal;
 
 \hail812\adminlte3\assets\FontAwesomeAsset::register($this);
 \hail812\adminlte3\assets\AdminLteAsset::register($this);
@@ -12,23 +13,23 @@ $this->registerCssFile('https://fonts.googleapis.com/css?family=Source+Sans+Pro:
 
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
 
-use backend\assets\ThemeAsset;
-ThemeAsset::register($this);
+use frontend\assets\LteAsset;
+LteAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="<?= Yii::$app->language ?>" class="scroll-smooth">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php $this->registerCsrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?= $this->title ? $this->title : Yii::$app->name ?></title>
     <?php $this->head() ?>
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-navbar-fixed layout-footer-fixed ">
 <?php $this->beginBody() ?>
-
+<?= \lavrentiev\widgets\toastr\NotificationFlash::widget() ?>
 <div class="wrapper">
     <!-- Navbar -->
     <?= $this->render('navbar', ['assetDir' => $assetDir]) ?>
@@ -47,6 +48,17 @@ ThemeAsset::register($this);
 
     <!-- Main Footer -->
     <?= $this->render('footer') ?>
+    
+<?php 
+Modal::begin([
+    'id'=>'activity-modal',
+    'size'=>'modal-lg',
+    'title' => 'MANAGEMENT',
+    'clientOptions' => ['backdrop' => 'static']
+    //'footer' => '<button type="button" class="btn btn-primary" data-dismiss="modal">ปิด</button>',
+]);
+Modal::end();
+?>
 </div>
 
 <?php $this->endBody() ?>

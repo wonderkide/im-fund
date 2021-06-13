@@ -8,7 +8,7 @@
             <ul>
                 <li class="active"><a href="/">Home</a></li>
                 <?php if(!Yii::$app->user->isGuest): ?>
-                <li><a href="/fund">Fund</a></li>
+                <li><a href="/fund/index">Fund</a></li>
                 <?php endif; ?>
                 <?php /*
                 <li><a href="#about">About</a></li>

@@ -6,7 +6,7 @@
     </a>
 
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar sidebar-dark-red">
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
@@ -35,7 +35,8 @@
             <?php
             echo \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
-                    ['label' => 'Admin', 'icon' => 'users', 'url' => ['/admin/index']],
+                    ['label' => 'รายชื่อกองทุน', 'icon' => 'users', 'url' => ['/fund/index']],
+                    ['label' => 'จัดการพอร์ต', 'icon' => 'users', 'url' => ['/fund-port/index']],
                     /*[
                         'label' => 'Starter Pages',
                         'icon' => 'tachometer-alt',

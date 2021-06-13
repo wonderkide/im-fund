@@ -2,16 +2,19 @@
 
 namespace frontend\controllers;
 
-use common\models\FundInvest;
-use common\models\FundInvestSearch;
+use common\models\FundPortDetail;
+use common\models\FundPortDetailSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use yii\filters\AccessControl;
+use frontend\components\AdminLteController;
+
 /**
- * FundInvestController implements the CRUD actions for FundInvest model.
+ * FundInvestDetailController implements the CRUD actions for FundInvestDetail model.
  */
-class FundInvestController extends Controller
+class FundPortDetailController extends AdminLteController
 {
     /**
      * @inheritDoc
@@ -27,17 +30,26 @@ class FundInvestController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
             ]
         );
     }
 
     /**
-     * Lists all FundInvest models.
+     * Lists all FundInvestDetail models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new FundInvestSearch();
+        $searchModel = new FundPortDetailSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -47,7 +59,7 @@ class FundInvestController extends Controller
     }
 
     /**
-     * Displays a single FundInvest model.
+     * Displays a single FundInvestDetail model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -60,13 +72,13 @@ class FundInvestController extends Controller
     }
 
     /**
-     * Creates a new FundInvest model.
+     * Creates a new FundInvestDetail model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new FundInvest();
+        $model = new FundPortDetail();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -82,7 +94,7 @@ class FundInvestController extends Controller
     }
 
     /**
-     * Updates an existing FundInvest model.
+     * Updates an existing FundInvestDetail model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -102,7 +114,7 @@ class FundInvestController extends Controller
     }
 
     /**
-     * Deletes an existing FundInvest model.
+     * Deletes an existing FundInvestDetail model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -116,15 +128,15 @@ class FundInvestController extends Controller
     }
 
     /**
-     * Finds the FundInvest model based on its primary key value.
+     * Finds the FundInvestDetail model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return FundInvest the loaded model
+     * @return FundInvestDetail the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = FundInvest::findOne($id)) !== null) {
+        if (($model = FundPortDetail::findOne($id)) !== null) {
             return $model;
         }
 

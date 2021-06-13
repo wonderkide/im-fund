@@ -9,12 +9,15 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 use yii\filters\AccessControl;
-use frontend\components\MyController;
+use frontend\components\AdminLteController;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
+use Yii;
 
 /**
  * FundController implements the CRUD actions for Fund model.
  */
-class FundController extends MyController
+class FundController extends AdminLteController
 {
     /**
      * @inheritDoc
@@ -85,16 +88,35 @@ class FundController extends MyController
     public function actionCreate()
     {
         $model = new Fund();
+        $model->fund_type_in_id = 1;
+        $model->dividend = 0;
+        $model->currency_policy = 4;
+        
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
 
-        if ($this->request->isPost) {
+        /*if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
+        }*/
+        
+        if ($model->load(Yii::$app->request->post())) {
+            $model->user_id = Yii::$app->user->id;
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'อัพเดทข้อมูลสำเร็จ');
+            }
+            else{
+                Yii::$app->session->setFlash('error', 'ไม่สามารถทำรายการได้');
+            }
+            return $this->redirect(['index']);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' => $model,
         ]);
     }

@@ -12,10 +12,10 @@ class m210610_093102_create_fund_invest_detail_table extends Migration
      */
     public function safeUp()
     {
-        $this->createTable('{{%fund_invest_detail}}', [
+        $this->createTable('{{%fund_port_detail}}', [
             'id' => $this->primaryKey(),
             'fund_id' => $this->integer()->null(),
-            'fund_invest_id' => $this->integer()->null(),
+            'fund_port_id' => $this->integer()->null(),
             'date' => $this->date()->notNull(),
             'nav' => $this->double()->notNull(),
             'amount' => $this->double()->notNull(),
@@ -25,8 +25,8 @@ class m210610_093102_create_fund_invest_detail_table extends Migration
             'status' => $this->tinyInteger()->notNull()->defaultValue(1)->comment('1=ปกติ,0=ลบ')
         ]);
         
-        $this->addForeignKey("fk-fund_invest_detail-fund_invest_id", 'fund_invest_detail', 'fund_invest_id', 'fund_invest', 'id', 'SET NULL');
-        $this->addForeignKey("fk-fund_invest_detail-fund_id", 'fund_invest_detail', 'fund_id', 'fund', 'id', 'SET NULL');
+        $this->addForeignKey("fk-fund_port_detail-fund_port_id", 'fund_port_detail', 'fund_port_id', 'fund_port', 'id', 'SET NULL');
+        $this->addForeignKey("fk-fund_port_detail-fund_id", 'fund_port_detail', 'fund_id', 'fund', 'id', 'SET NULL');
     }
 
     /**
@@ -34,6 +34,6 @@ class m210610_093102_create_fund_invest_detail_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%fund_invest_detail}}');
+        $this->dropTable('{{%fund_port_detail}}');
     }
 }
