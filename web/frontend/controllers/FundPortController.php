@@ -13,6 +13,10 @@ use yii\filters\AccessControl;
 use frontend\components\AdminLteController;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
+use common\models\FundPortList;
+use common\models\FundPortListDetail;
+use common\models\FundPortListSearch;
+use common\models\BuyForm;
 
 /**
  * FundInvestController implements the CRUD actions for FundInvest model.
@@ -88,7 +92,15 @@ class FundPortController extends AdminLteController
             return ActiveForm::validate($model);
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->user_id = Yii::$app->user->id;
+            $model->created_at = date('Y-m-d H:i:s');
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'อัพเดทข้อมูลสำเร็จ');
+            }
+            else{
+                Yii::$app->session->setFlash('error', 'ไม่สามารถทำรายการได้');
+            }
             Yii::$app->session->setFlash('success', 'อัพเดทข้อมูลสำเร็จ');
             return $this->redirect(['index']);
         }
@@ -152,5 +164,42 @@ class FundPortController extends AdminLteController
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    
+    public function actionDetail($id){
+        $port = $this->findModel($id);
+        $list = FundPortList::find()->where(['fund_port_id' => $id])->orderBy(['percent' => SORT_DESC])->all();
+        
+        $searchModel = new FundPortListSearch();
+        $searchModel->fund_port_id = $id;
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        
+        
+        return $this->render('detail',[
+            'port' => $port,
+            'list' => $list,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionBuy(){
+        
+        $model = new BuyForm();
+        
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            $port_list = FundPortList::find()->where($condition);
+            Yii::$app->session->setFlash('success', 'อัพเดทข้อมูลสำเร็จ');
+            return $this->redirect(['index']);
+        }
+
+        return $this->renderAjax('_buy', [
+            'model' => $model,
+        ]);
     }
 }

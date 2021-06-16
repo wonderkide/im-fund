@@ -2,19 +2,16 @@
 
 namespace frontend\controllers;
 
-use common\models\FundPortDetail;
-use common\models\FundPortDetailSearch;
+use common\models\FundPortList;
+use common\models\FundPortListSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-use yii\filters\AccessControl;
-use frontend\components\AdminLteController;
-
 /**
- * FundInvestDetailController implements the CRUD actions for FundInvestDetail model.
+ * FundPortListController implements the CRUD actions for FundPortList model.
  */
-class FundPortDetailController extends AdminLteController
+class FundPortListController extends Controller
 {
     /**
      * @inheritDoc
@@ -30,26 +27,17 @@ class FundPortDetailController extends AdminLteController
                         'delete' => ['POST'],
                     ],
                 ],
-                'access' => [
-                    'class' => AccessControl::className(),
-                    'rules' => [
-                        [
-                            'allow' => true,
-                            'roles' => ['@'],
-                        ],
-                    ],
-                ],
             ]
         );
     }
 
     /**
-     * Lists all FundInvestDetail models.
+     * Lists all FundPortList models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new FundPortDetailSearch();
+        $searchModel = new FundPortListSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -59,7 +47,7 @@ class FundPortDetailController extends AdminLteController
     }
 
     /**
-     * Displays a single FundInvestDetail model.
+     * Displays a single FundPortList model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -72,13 +60,13 @@ class FundPortDetailController extends AdminLteController
     }
 
     /**
-     * Creates a new FundInvestDetail model.
+     * Creates a new FundPortList model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new FundPortDetail();
+        $model = new FundPortList();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -94,7 +82,7 @@ class FundPortDetailController extends AdminLteController
     }
 
     /**
-     * Updates an existing FundInvestDetail model.
+     * Updates an existing FundPortList model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -114,7 +102,7 @@ class FundPortDetailController extends AdminLteController
     }
 
     /**
-     * Deletes an existing FundInvestDetail model.
+     * Deletes an existing FundPortList model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -128,15 +116,15 @@ class FundPortDetailController extends AdminLteController
     }
 
     /**
-     * Finds the FundInvestDetail model based on its primary key value.
+     * Finds the FundPortList model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return FundInvestDetail the loaded model
+     * @return FundPortList the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = FundPortDetail::findOne($id)) !== null) {
+        if (($model = FundPortList::findOne($id)) !== null) {
             return $model;
         }
 

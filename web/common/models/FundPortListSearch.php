@@ -4,12 +4,12 @@ namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\FundPort;
+use common\models\FundPortList;
 
 /**
- * FundPortSearch represents the model behind the search form of `common\models\FundPort`.
+ * FundPortListSearch represents the model behind the search form of `common\models\FundPortList`.
  */
-class FundPortSearch extends FundPort
+class FundPortListSearch extends FundPortList
 {
     /**
      * {@inheritdoc}
@@ -17,9 +17,9 @@ class FundPortSearch extends FundPort
     public function rules()
     {
         return [
-            [['id', 'user_id'], 'integer'],
-            [['name', 'created_at', 'updated_at'], 'safe'],
-            [['amount', 'profit_amount'], 'number'],
+            [['id', 'user_id', 'fund_port_id', 'fund_id'], 'integer'],
+            [['present_value', 'cost_value', 'present_nav', 'cost_nav', 'units', 'percent'], 'number'],
+            [['created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class FundPortSearch extends FundPort
      */
     public function search($params)
     {
-        $query = FundPort::find();
+        $query = FundPortList::find();
 
         // add conditions that should always apply here
 
@@ -61,14 +61,19 @@ class FundPortSearch extends FundPort
         $query->andFilterWhere([
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'amount' => $this->amount,
-            'profit_amount' => $this->profit_amount,
+            'fund_port_id' => $this->fund_port_id,
+            'fund_id' => $this->fund_id,
+            'present_value' => $this->present_value,
+            'cost_value' => $this->cost_value,
+            'present_nav' => $this->present_nav,
+            'cost_nav' => $this->cost_nav,
+            'units' => $this->units,
+            'percent' => $this->percent,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
-
         return $dataProvider;
     }
+    
 }

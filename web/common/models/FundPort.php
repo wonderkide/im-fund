@@ -10,16 +10,12 @@ use Yii;
  * @property int $id
  * @property int|null $user_id
  * @property string $name
- * @property float $present_value
- * @property float $cost_value
- * @property float $present_nav
- * @property float $cost_nav
- * @property float $units
+ * @property float $amount
+ * @property float $profit_amount
  * @property string $created_at
  * @property string|null $updated_at
  *
- * @property Fund $fund
- * @property FundInvestDetail[] $fundInvestDetails
+ * @property FundPortList[] $fundPortLists
  * @property User $user
  */
 class FundPort extends \yii\db\ActiveRecord
@@ -39,10 +35,10 @@ class FundPort extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'integer'],
-            [['name'], 'string', 'max' => 255],
-            [['present_value', 'cost_value', 'present_nav', 'cost_nav', 'units'], 'number'],
-            [['created_at', 'name'], 'required'],
+            [['name', 'created_at'], 'required'],
+            [['amount', 'profit_amount'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
+            [['name'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -55,24 +51,22 @@ class FundPort extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'present_value' => 'Present Value',
-            'cost_value' => 'Cost Value',
-            'present_nav' => 'Present Nav',
-            'cost_nav' => 'Cost Nav',
-            'units' => 'Units',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'name' => 'ชื่อพอร์ต',
+            'amount' => 'เงินทุน',
+            'profit_amount' => 'กำไร/ขาดทุน',
+            'created_at' => 'สร้างเมื่อ',
+            'updated_at' => 'อัพเดทเมื่อ',
         ];
     }
 
     /**
-     * Gets query for [[FundInvestDetails]].
+     * Gets query for [[FundPortLists]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFundPortDetails()
+    public function getFundPortLists()
     {
-        return $this->hasMany(FundPortDetail::className(), ['fund_port_id' => 'id']);
+        return $this->hasMany(FundPortList::className(), ['fund_port_id' => 'id']);
     }
 
     /**

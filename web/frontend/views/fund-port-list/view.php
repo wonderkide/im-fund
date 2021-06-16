@@ -4,14 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\FundPort */
+/* @var $model common\models\FundPortList */
 
-$this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Fund Ports', 'url' => ['index']];
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Fund Port Lists', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="fund-port-view">
+<div class="fund-port-list-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -31,9 +31,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'user_id',
-            'name',
-            'amount',
-            'profit_amount',
+            'fund_port_id',
+            'fund_id',
+            'present_value',
+            'cost_value',
+            'present_nav',
+            'cost_nav',
+            'units',
+            'percent',
             'created_at',
             'updated_at',
         ],

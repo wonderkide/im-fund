@@ -3,13 +3,13 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\FundInvestDetail */
+/* @var $model common\models\FundPortListDetail */
 
-$this->title = 'Create Fund Invest Detail';
-$this->params['breadcrumbs'][] = ['label' => 'Fund Invest Details', 'url' => ['index']];
+$this->title = 'Create Fund Port List Detail';
+$this->params['breadcrumbs'][] = ['label' => 'Fund Port List Details', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="fund-invest-detail-create">
+<div class="fund-port-list-detail-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

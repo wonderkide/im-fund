@@ -4,19 +4,18 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\FundInvestSearch */
+/* @var $searchModel common\models\FundPortListSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'จัดการพอร์ต';
+$this->title = 'Fund Port Lists';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="fund-invest-index">
+<div class="fund-port-list-index">
+
+    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('<i class="fa fa-plus-circle"></i> เพิ่ม', null, [
-            'class' => 'btn btn-success activity-create-link text-light',
-            'data-title' => 'เพิ่มพอร์ต',
-        ]) ?>
+        <?= Html::a('Create Fund Port List', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -26,12 +25,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            
-            'name',
-            'amount',
-            'profit_amount',
+
+            'id',
+            'user_id',
+            'fund_port_id',
+            'fund_id',
+            'present_value',
+            //'cost_value',
+            //'present_nav',
+            //'cost_nav',
+            //'units',
+            //'percent',
             //'created_at',
-            'updated_at',
+            //'updated_at',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

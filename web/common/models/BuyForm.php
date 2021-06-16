@@ -5,11 +5,11 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "fund_port_detail".
+ * This is the model class for table "fund_port_list_detail".
  *
  * @property int $id
- * @property int|null $fund_id
- * @property int|null $fund_invest_id
+ * @property int|null $user_id
+ * @property int|null $fund_port_list_id
  * @property string $date
  * @property float $nav
  * @property float $amount
@@ -18,17 +18,17 @@ use Yii;
  * @property int $type 1=ซื้อ,2=ขาย,3=สับเปลี่ยนเข้า,4=สับเปลี่ยนออก
  * @property int $status 1=ปกติ,0=ลบ
  *
- * @property Fund $fund
- * @property FundPort $fundPort
+ * @property FundPortList $fundPortList
+ * @property User $user
  */
-class FundPortDetail extends \yii\db\ActiveRecord
+class BuyForm extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'fund_port_detail';
+        return 'fund_port_list_detail';
     }
 
     /**
@@ -37,12 +37,12 @@ class FundPortDetail extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fund_id', 'fund_port_id', 'type', 'status'], 'integer'],
+            [['user_id', 'fund_port_list_id', 'type', 'status'], 'integer'],
             [['date', 'nav', 'amount', 'units', 'created_at', 'type'], 'required'],
             [['date', 'created_at'], 'safe'],
             [['nav', 'amount', 'units'], 'number'],
-            [['fund_id'], 'exist', 'skipOnError' => true, 'targetClass' => Fund::className(), 'targetAttribute' => ['fund_id' => 'id']],
-            [['fund_port_id'], 'exist', 'skipOnError' => true, 'targetClass' => FundPort::className(), 'targetAttribute' => ['fund_port_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['fund_port_list_id'], 'exist', 'skipOnError' => true, 'targetClass' => FundPortList::className(), 'targetAttribute' => ['fund_port_list_id' => 'id']],
         ];
     }
 
@@ -53,8 +53,8 @@ class FundPortDetail extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'fund_id' => 'Fund ID',
-            'fund_port_id' => 'Fund Port ID',
+            'user_id' => 'User ID',
+            'fund_port_list_id' => 'Fund Port List ID',
             'date' => 'Date',
             'nav' => 'Nav',
             'amount' => 'Amount',
@@ -66,22 +66,22 @@ class FundPortDetail extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Fund]].
+     * Gets query for [[FundPortList]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFund()
+    public function getFundPortList()
     {
-        return $this->hasOne(Fund::className(), ['id' => 'fund_id']);
+        return $this->hasOne(FundPortList::className(), ['id' => 'fund_port_list_id']);
     }
 
     /**
-     * Gets query for [[FundInvest]].
+     * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFundPort()
+    public function getUser()
     {
-        return $this->hasOne(FundPort::className(), ['id' => 'fund_port_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }

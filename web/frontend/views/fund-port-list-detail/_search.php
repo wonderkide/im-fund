@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\FundInvestDetailSearch */
+/* @var $model common\models\FundPortListDetailSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="fund-invest-detail-search">
+<div class="fund-port-list-detail-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -17,9 +17,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'fund_id') ?>
+    <?= $form->field($model, 'user_id') ?>
 
-    <?= $form->field($model, 'fund_invest_id') ?>
+    <?= $form->field($model, 'fund_port_list_id') ?>
 
     <?= $form->field($model, 'date') ?>
 

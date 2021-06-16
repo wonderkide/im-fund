@@ -4,17 +4,17 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\FundInvestDetail */
+/* @var $model common\models\FundPortListDetail */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="fund-invest-detail-form">
+<div class="fund-port-list-detail-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'fund_id')->textInput() ?>
+    <?= $form->field($model, 'user_id')->textInput() ?>
 
-    <?= $form->field($model, 'fund_invest_id')->textInput() ?>
+    <?= $form->field($model, 'fund_port_list_id')->textInput() ?>
 
     <?= $form->field($model, 'date')->textInput() ?>
 
