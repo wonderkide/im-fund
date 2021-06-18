@@ -17,6 +17,7 @@ $l = null;
 if($model->fund_id){
     $l = Fund::findOne($model->fund_id)->name;
 }
+//var_dump($l);exit();
 ?>
 
 <div class="fund-port-list-detail-form">
@@ -30,7 +31,7 @@ if($model->fund_id){
     <?php
         echo $form->field($model, 'fund_id')->widget(Select2::classname(), [
             'initValueText' => $l, // set the initial display text
-            'options' => ['placeholder' => 'เลือกกองทุน ...', 'disabled' => true],
+            'options' => ['placeholder' => 'เลือกกองทุน ...'],
             'pluginOptions' => [
                 'allowClear' => true,
                 'minimumInputLength' => 3,

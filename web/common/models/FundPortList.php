@@ -59,16 +59,16 @@ class FundPortList extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'fund_port_id' => 'Fund Port ID',
-            'fund_id' => 'Fund ID',
-            'present_value' => 'Present Value',
-            'cost_value' => 'Cost Value',
-            'present_nav' => 'Present Nav',
-            'cost_nav' => 'Cost Nav',
-            'units' => 'Units',
-            'percent' => 'Percent',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'fund_port_id' => 'พอร์ต',
+            'fund_id' => 'กองทุน',
+            'present_value' => 'มูลค่าปัจจุบัน',
+            'cost_value' => 'มูลค่าต้นทุน',
+            'present_nav' => 'Nav ปัจจุบัน',
+            'cost_nav' => 'Nav ต้นทุน',
+            'units' => 'จำนวนหน่อย',
+            'percent' => 'เปอร์เซ็น',
+            'created_at' => 'สร้างเมื่อ',
+            'updated_at' => 'อัพเดทเมื่อ',
         ];
     }
 

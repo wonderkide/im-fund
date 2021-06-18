@@ -33,7 +33,19 @@ $this->params['breadcrumbs'][] = $this->title;
             //'created_at',
             'updated_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'=>'{detail} {update} {delete}',
+                'buttons'=>[
+                    'detail' => function($url,$model,$key){
+                        return Html::a('<i class="fas fa-list"></i>', $url);
+                    },
+                    'update' => function($url,$model,$key){
+                        return Html::a('<i class="fas fa-pencil-alt"></i>', '#', ['class' => 'activity-create-link', 'data-url' => $url, 'data-title' => 'แก้ไข']);
+                    }
+                ]
+            ],
         ],
     ]); ?>
 

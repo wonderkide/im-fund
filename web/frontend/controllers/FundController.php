@@ -13,6 +13,7 @@ use frontend\components\AdminLteController;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 use Yii;
+use yii\db\Query;
 
 /**
  * FundController implements the CRUD actions for Fund model.
@@ -169,5 +170,23 @@ class FundController extends AdminLteController
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    
+    public function actionFundList($q = null, $id = null) {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $query = new Query;
+            $query->select('id, name AS text')
+                ->from('fund')
+                ->where(['like', 'name', $q])
+                ->limit(20);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+        } elseif ($id > 0) {
+            $out['results'] = ['id' => $id, 'text' => Fund::find($id)->name];
+        }
+        return $out;
     }
 }

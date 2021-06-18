@@ -23,6 +23,8 @@ use Yii;
  */
 class BuyForm extends \yii\db\ActiveRecord
 {
+    public $fund_id;
+            
     /**
      * {@inheritdoc}
      */
@@ -37,7 +39,7 @@ class BuyForm extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'fund_port_list_id', 'type', 'status'], 'integer'],
+            [['user_id', 'fund_port_list_id', 'type', 'status', 'fund_id'], 'integer'],
             [['date', 'nav', 'amount', 'units', 'created_at', 'type'], 'required'],
             [['date', 'created_at'], 'safe'],
             [['nav', 'amount', 'units'], 'number'],
