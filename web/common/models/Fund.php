@@ -14,6 +14,8 @@ use Yii;
  * @property int|null $asset_management_id
  * @property string $name
  * @property string|null $name_th
+ * @property float|null $nav
+ * @property string|null $nav_date
  * @property int $risk
  * @property string|null $feeder_fund
  * @property int $currency_policy 1=ป้องกัน,2=ไม่ป้องกัน,3=ป้องกันบางส่วน,4=ดุลพินิจ
@@ -51,8 +53,8 @@ class Fund extends \yii\db\ActiveRecord
         return [
             [['user_id', 'fund_type_id', 'fund_type_in_id', 'asset_management_id', 'risk', 'currency_policy', 'dividend'], 'integer'],
             [['user_id', 'fund_type_id', 'fund_type_in_id', 'asset_management_id','name', 'risk', 'dividend'], 'required'],
-            [['frontend_fee', 'backend_fee', 'fee', 'first_invest', 'invest', 'net_asset_value'], 'number'],
-            [['registration_date'], 'safe'],
+            [['frontend_fee', 'backend_fee', 'fee', 'first_invest', 'invest', 'net_asset_value', 'nav'], 'number'],
+            [['registration_date', 'nav_date'], 'safe'],
             [['detail'], 'string'],
             [['name', 'name_th', 'feeder_fund'], 'string', 'max' => 255],
             [['asset_management_id'], 'exist', 'skipOnError' => true, 'targetClass' => AssetManagement::className(), 'targetAttribute' => ['asset_management_id' => 'id']],

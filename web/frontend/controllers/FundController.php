@@ -14,6 +14,7 @@ use yii\web\Response;
 use yii\widgets\ActiveForm;
 use Yii;
 use yii\db\Query;
+use common\components\FinnominaService;
 
 /**
  * FundController implements the CRUD actions for Fund model.
@@ -188,5 +189,14 @@ class FundController extends AdminLteController
             $out['results'] = ['id' => $id, 'text' => Fund::find($id)->name];
         }
         return $out;
+    }
+    
+    public function actionPullFund(){
+        /*$service = new FinnominaService();
+        $fund_code = 'TMB-ES-GENOME';
+        $result = $service->getFundDetail($fund_code);
+        var_dump($result);exit();*/
+        
+        return $this->render('pt');
     }
 }
