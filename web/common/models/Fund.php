@@ -19,6 +19,7 @@ use Yii;
  * @property int $risk
  * @property string|null $feeder_fund
  * @property int $currency_policy 1=ป้องกัน,2=ไม่ป้องกัน,3=ป้องกันบางส่วน,4=ดุลพินิจ
+ * @property string|null $currency_policy_text
  * @property int $dividend 0=ไม่จ่าย,1=จ่าย
  * @property float $frontend_fee ค่าธรรมเนียมขาย
  * @property float $backend_fee ค่าธรรมเนียมรับซื้อคืน
@@ -26,6 +27,7 @@ use Yii;
  * @property float|null $first_invest ลงทุนครั้งแรก
  * @property float|null $invest ลงทุนครั้งถัดไป
  * @property string|null $registration_date
+ * @property string|null $registration_date_text
  * @property float|null $net_asset_value
  * @property string|null $detail
  *
@@ -34,6 +36,7 @@ use Yii;
  * @property FundInvest[] $fundInvests
  * @property FundType $fundType
  * @property FundTypeIn $fundTypeIn
+ * @property int|null $content_status
  */
 class Fund extends \yii\db\ActiveRecord
 {
@@ -51,12 +54,14 @@ class Fund extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'fund_type_id', 'fund_type_in_id', 'asset_management_id', 'risk', 'currency_policy', 'dividend'], 'integer'],
+            [['user_id', 'fund_type_id', 'fund_type_in_id', 'asset_management_id', 'risk', 'currency_policy', 'dividend', 'content_status'], 'integer'],
             [['user_id', 'fund_type_id', 'fund_type_in_id', 'asset_management_id','name', 'risk', 'dividend'], 'required'],
             [['frontend_fee', 'backend_fee', 'fee', 'first_invest', 'invest', 'net_asset_value', 'nav'], 'number'],
             [['registration_date', 'nav_date'], 'safe'],
             [['detail'], 'string'],
-            [['name', 'name_th', 'feeder_fund'], 'string', 'max' => 255],
+            [['name', 'name_th', 'feeder_fund', 'registration_date_text'], 'string', 'max' => 255],
+            [['currency_policy_text'], 'string', 'max' => 512],
+            
             [['asset_management_id'], 'exist', 'skipOnError' => true, 'targetClass' => AssetManagement::className(), 'targetAttribute' => ['asset_management_id' => 'id']],
             [['fund_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => FundType::className(), 'targetAttribute' => ['fund_type_id' => 'id']],
             [['fund_type_in_id'], 'exist', 'skipOnError' => true, 'targetClass' => FundTypeIn::className(), 'targetAttribute' => ['fund_type_in_id' => 'id']],

@@ -88,12 +88,12 @@ class m210607_131154_create_fund_type_table extends Migration
         ]);
         $this->insert('fund_type', [
             'name' => 'ตราสารหนี้ประเทศตลาดเกิดใหม่ แบบป้องกันความเสี่ยงอัตราแลกเปลี่ยนเต็มจำนวน',
-            'name_en' => 'Emerging Marget Bond Fully F/X Hedge',
+            'name_en' => 'Emerging Market Bond Fully F/X Hedge',
             'parent_id' => 1
         ]);
         $this->insert('fund_type', [
             'name' => 'ตราสารหนี้ตลาดเกิดใหม่ ทั้งแบบป้องกันหรือไม่ป้องกันความเสี่ยงอัตราแลกเปลี่ยนตามดุลยพินิจของผู้จัดการกองทุน',
-            'name_en' => 'Emerging Marget Bond Discretionary F/X Hedge or Unhedge',
+            'name_en' => 'Emerging Market Bond Discretionary F/X Hedge or Unhedge',
             'parent_id' => 1
         ]);
         $this->insert('fund_type', [
@@ -142,17 +142,17 @@ class m210607_131154_create_fund_type_table extends Migration
         //3
         $this->insert('fund_type', [
             'name' => 'กองทุนรวมอสังหาริมทรัพย์ไทย',
-            'name_en' => 'Fund of Property Fund - Thai',
+            'name_en' => 'Fund of Property Fund – Thai',
             'parent_id' => 3
         ]);
         $this->insert('fund_type', [
             'name' => 'กองทุนรวมอสังหาริมทรัพย์ และ ทรัสต์เพื่อการลงทุนในอสังหาริมทรัพย์ผสมไทยและต่างประเทศ',
-            'name_en' => 'Fund of Property Fund - Thai and Foreign',
+            'name_en' => 'Fund of Property Fund – Thai and Foreign',
             'parent_id' => 3
         ]);
         $this->insert('fund_type', [
             'name' => 'กองทุนรวมอสังหาริมทรัพย์ต่างประเทศ',
-            'name_en' => 'Fund of Property Fund - Foreign',
+            'name_en' => 'Fund of Property Fund – Foreign',
             'parent_id' => 3
         ]);
         
@@ -181,7 +181,7 @@ class m210607_131154_create_fund_type_table extends Migration
         //5
         $this->insert('fund_type', [
             'name' => 'หุ้นไทยขนาดเล็กและกลาง',
-            'name_en' => 'Equity Small - Mid Cap',
+            'name_en' => 'Equity Small – Mid Cap',
             'parent_id' => 5
         ]);
         $this->insert('fund_type', [
@@ -221,7 +221,7 @@ class m210607_131154_create_fund_type_table extends Migration
         ]);
         $this->insert('fund_type', [
             'name' => 'หุ้นตลาดเกิดใหม่',
-            'name_en' => 'Emerging Marget',
+            'name_en' => 'Emerging Market',
             'parent_id' => 5
         ]);
         $this->insert('fund_type', [
