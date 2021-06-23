@@ -20,6 +20,12 @@ $this->params['breadcrumbs'][] = $this->title;
             //'data-url' => Url::to(['fund-port-list-detail/create', 'redirect' => Url::to(['fund-port', 'id' => $port->id])])
             'data-url' => Url::to(['fund-port/buy', 'id' => $port->id])
         ]) ?>
+        <?= Html::a('<i class="fa fa-calculator"></i> คำนวณมูลค่า', null, [
+            'class' => 'btn btn-dark activity-confirm-link text-light',
+            'data-title' => 'คำนวณมูลค่า',
+            //'data-url' => Url::to(['fund-port-list-detail/create', 'redirect' => Url::to(['fund-port', 'id' => $port->id])])
+            'data-url' => Url::to(['fund-port/calculator', 'id' => $port->id])
+        ]) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -33,13 +39,13 @@ $this->params['breadcrumbs'][] = $this->title;
             //'id',
             //'user_id',
             //'fund_port_id',
-            //'fund_id',
-            [
+            'fund.name',
+            /*[
                 'attribute' => 'fund_id',
                 'value' => function ($model) {
                     return $model->fund->name;
                 }
-            ],
+            ],*/
             'present_value',
             'cost_value',
             'present_nav',

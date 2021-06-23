@@ -11,6 +11,8 @@ use common\models\FundPortList;
  */
 class FundPortListSearch extends FundPortList
 {
+    public $fund_name;
+    
     /**
      * {@inheritdoc}
      */
@@ -19,7 +21,7 @@ class FundPortListSearch extends FundPortList
         return [
             [['id', 'user_id', 'fund_port_id', 'fund_id'], 'integer'],
             [['present_value', 'cost_value', 'present_nav', 'cost_nav', 'units', 'percent'], 'number'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', 'fund_name'], 'safe'],
         ];
     }
 
@@ -41,7 +43,7 @@ class FundPortListSearch extends FundPortList
      */
     public function search($params)
     {
-        $query = FundPortList::find();
+        $query = FundPortList::find()/*->select('fund_port_list.*, fund.name AS fund_name')*/->joinWith('fund');
 
         // add conditions that should always apply here
 
@@ -72,6 +74,8 @@ class FundPortListSearch extends FundPortList
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
+        
+        //$query->andFilterWhere(['like', 'name', $this->fund_id]);
 
         return $dataProvider;
     }

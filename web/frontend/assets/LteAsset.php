@@ -11,6 +11,7 @@ class LteAsset extends AssetBundle
 {
     public $sourcePath = '@LteAsset';
     public $css = [
+        'css/pagination.css',
         'css/main.css',
     ];
     public $js = [

@@ -362,4 +362,15 @@ class FundPortController extends AdminLteController
             'model' => $model,
         ]);
     }
+    
+    public function actionCalculator($id){
+        $port_list = FundPortList::findOne($id);
+        if(!$port_list){
+            Yii::$app->session->setFlash('error', 'ไม่พบข้อมูลพอร์ตที่ท่านเลือก');
+            return $this->redirect(['index']);
+        }
+        $redirect = Url::to(['detail', 'id' => $port_list->fund_port_id]);
+        Yii::$app->session->setFlash('success', $port_list->fundPort->name);
+        return $this->redirect([$redirect]);
+    }
 }

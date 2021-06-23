@@ -28,8 +28,28 @@ $this->params['breadcrumbs'][] = $this->title;
             'amount',
             'units',
             'created_at',
-            'type',
+            //'type',
             //'status',
+            [
+                'attribute' => 'type',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $text = '-';
+                    if($model->type == 1){
+                        $text = '<span class="text-light bg-success p-1 pl-2 pr-2 rounded">ซื้อ</span>';
+                    }
+                    elseif($model->type == 2){
+                        $text = '<span class="text-light bg-danger p-1 pl-2 pr-2 rounded">ขาย</span>';
+                    }
+                    elseif($model->type == 3){
+                        $text = '<span class="text-light bg-success p-1 pl-2 pr-2 rounded">ย้ายเข้า</span>';
+                    }
+                    elseif($model->type == 4){
+                        $text = '<span class="text-light bg-danger p-1 pl-2 pr-2 rounded">ย้ายออก</span>';
+                    }
+                    return $text;
+                }
+            ],
 
             //['class' => 'yii\grid\ActionColumn'],
         ],

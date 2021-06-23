@@ -142,17 +142,17 @@ class m210607_131154_create_fund_type_table extends Migration
         //3
         $this->insert('fund_type', [
             'name' => 'กองทุนรวมอสังหาริมทรัพย์ไทย',
-            'name_en' => 'Fund of Property Fund – Thai',
+            'name_en' => 'Fund of Property fund - Thai',
             'parent_id' => 3
         ]);
         $this->insert('fund_type', [
             'name' => 'กองทุนรวมอสังหาริมทรัพย์ และ ทรัสต์เพื่อการลงทุนในอสังหาริมทรัพย์ผสมไทยและต่างประเทศ',
-            'name_en' => 'Fund of Property Fund – Thai and Foreign',
+            'name_en' => 'Fund of Property fund - Thai and Foreign',
             'parent_id' => 3
         ]);
         $this->insert('fund_type', [
             'name' => 'กองทุนรวมอสังหาริมทรัพย์ต่างประเทศ',
-            'name_en' => 'Fund of Property Fund – Foreign',
+            'name_en' => 'Fund of Property fund - Foreign',
             'parent_id' => 3
         ]);
         
@@ -181,7 +181,7 @@ class m210607_131154_create_fund_type_table extends Migration
         //5
         $this->insert('fund_type', [
             'name' => 'หุ้นไทยขนาดเล็กและกลาง',
-            'name_en' => 'Equity Small – Mid Cap',
+            'name_en' => 'Equity Small - Mid Cap',
             'parent_id' => 5
         ]);
         $this->insert('fund_type', [

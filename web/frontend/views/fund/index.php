@@ -45,7 +45,23 @@ $this->params['breadcrumbs'][] = $this->title;
             //'net_asset_value',
             //'detail:ntext',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'=>'{view} {update}',
+                'buttons'=>[
+                    'view' => function($url,$model,$key){
+                        return Html::a('<i class="fas fa-eye"></i>', 
+                                null,
+                                [
+                                    'class' => 'activity-manage-link cursor-pointer', 
+                                    'data-url' => Url::to(['view', 'id' => $model->id]), 
+                                    'data-title' => 'รายละเอียด',
+                                    'title' => 'รายละเอียด'
+                                ]);
+                    },
+                ]
+            ],
         ],
     ]); ?>
 
