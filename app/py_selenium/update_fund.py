@@ -9,6 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from datetime import datetime, date, timedelta
 import json
+import urllib.parse
 
 # Import modules
 import subprocess, sys, os   
@@ -40,7 +41,7 @@ def check_dividend(d):
 		return 0
 
 def check_fee_text(txt):
-	if txt == 'ยกเว้น' or txt == 'ไม่มี' or txt == '-' or txt == 'ยกเว้นการเรียกเก็บ' or txt == 'ยกเว้น ไม่เรียกเก็บ' or txt == '':
+	if txt == 'ยกเว้น' or txt == 'ไม่มี' or txt == '-' or txt == 'ยกเว้นการเรียกเก็บ' or txt == 'ยกเว้น ไม่เรียกเก็บ' or txt == 'ยกเว้นไม่เรียกเก็บ' or txt == 'ไม่เรียกเก็บ' or txt == 'ยังไม่เรียกเก็บ' or txt == '':
 		return 0
 	else:
 		x = txt.replace("%", "").strip()
@@ -52,11 +53,12 @@ def check_replace_text(txt):
 	txt = txt.replace(",", "")
 	txt = txt.replace("บาท", "")
 	txt = txt.replace("-", "")
+	txt = txt.replace("*", "")
 
 	txt = txt.strip()
 
 	if txt == '':
-		return 0
+		return None
 	else:
 		return txt
 
@@ -104,27 +106,45 @@ def check_number(number):
 """
 
 def check_number(s):
-	return s
+	if s == None:
+		return s
+	try:
+		float(s)
+		return s
+	except ValueError:
+		return None
+	#if s == '':
+	#	return 0
+	#else:
+	#	return s
 
 
 def findFund(fund):
 	f_id = fund[0]
 	f_name = fund[1]
-	url = 'https://www.finnomena.com/fund/'+f_name
+	#print(f_name)
+
+	f_name_encode = urllib.parse.quote(f_name)
+	f_name_encode = f_name_encode.replace("/", "%2F")
+	#print(f_name_encode)
+	
+	url = 'https://www.finnomena.com/fund/'+f_name_encode
 	#driver = webdriver.Chrome('./webdriver/chromedriver')
 
 	options = webdriver.ChromeOptions()
 	options.add_argument('--headless')
 	driver = webdriver.Chrome('./webdriver/chromedriver', options=options) 
-
+	#driver.implicitly_wait(20)
 	driver.get(url)
+
 
 	name_th = driver.find_elements_by_xpath('//*[@id="fund-header"]/div[1]/p')
 
-	nav_block = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".fund-nav-percent")))
-	nav = WebDriverWait(nav_block, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "h3")))
-	nav_date = WebDriverWait(nav_block, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "p")))
+	#nav_block = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".fund-nav-percent")))
+	#nav = WebDriverWait(nav_block, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "h3")))
+	#nav_date = WebDriverWait(nav_block, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "p")))
 
+	
 
 	#detail_left = driver.find_elements_by_xpath('//*[@id="fund-data-detail"]/div/div[1]/div')
 
@@ -159,20 +179,23 @@ def findFund(fund):
 	date = driver.find_elements_by_xpath('//*[@id="fund-data-detail"]/div/div[2]/div[6]/div[2]')
 	value = driver.find_elements_by_xpath('//*[@id="fund-data-detail"]/div/div[2]/div[7]/div[2]')
 
-
+	nav = driver.find_elements_by_xpath('//*[@id="fund-nav-share"]/div[1]/div/h3')
+	nav_date = driver.find_elements_by_xpath('//*[@id="fund-nav-share"]/div[1]/div/p')
 
 
 	name_th_text = name_th[0].text.strip()
 
-	nav_text = nav.text.strip()
+	nav_text = nav[0].text.strip()
 
-	nav_date_text = nav_date.text.strip()
+	nav_date_text = nav_date[0].text.strip()
 	nav_date_text = set_nav_date_format(nav_date_text)
 
 	fund_type_text = fund_type[0].text.strip()
 
 	risk_text = risk_block_text.split("-")[0].strip()
 	risk_text = check_number(risk_text)
+	if risk_text == None:
+		risk_text = 0
 	
 
 	fedder_fund = fedder_fund[0].text.strip()
@@ -210,7 +233,14 @@ def findFund(fund):
 	value_text = value[0].text.strip()
 	value_text = check_replace_text(value_text)
 
-	db.updateFund(f_id, name_th_text, nav_text, nav_date_text, fund_type_text, risk_text, fedder_fund, cur_policy_text, dividend_text, frontend_text, backend_text, fee_text, first_in_text, after_in_text, date_text, value_text)
+	if nav_text == '':
+		#nav = driver.find_elements_by_xpath('//*[@id="fund-nav-share"]/div[1]/div/h3')
+		#nav_text = nav[0].text.strip()
+		print('fucking cannot get NAV')
+		driver.close()
+		return
+
+	
 
 	print('NAME : ' + name_th_text)
 	print('NAV : ' + nav_text)
@@ -227,6 +257,8 @@ def findFund(fund):
 	print('after_in : ' + str(after_in_text))
 	print('date : ' + date_text)
 	print('value : ' + value_text)
+
+	db.updateFund(f_id, name_th_text, nav_text, nav_date_text, fund_type_text, risk_text, fedder_fund, cur_policy_text, dividend_text, frontend_text, backend_text, fee_text, first_in_text, after_in_text, date_text, value_text)
 
 
 

@@ -17,6 +17,8 @@ def connectDb():
 	return db
 
 def check_fund_type(name):
+
+	name = name.replace("–", "-")
 	db = connectDb()
 	cursor = db.cursor()
 

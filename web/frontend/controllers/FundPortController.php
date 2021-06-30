@@ -19,6 +19,7 @@ use common\models\FundPortListSearch;
 use common\models\FundPortListDetailSearch;
 use common\models\BuyForm;
 use yii\helpers\Url;
+use common\models\Fund;
 
 /**
  * FundInvestController implements the CRUD actions for FundInvest model.
@@ -147,9 +148,59 @@ class FundPortController extends AdminLteController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $port = $this->findModel($id);
+            $port_list = FundPortList::find()->where(['port_id' => $id])->all();
+            foreach ($port_list as $list) {
+                $detail = FundPortListDetail::deleteAll(['fund_port_list_id' => $list->id]);
+                $list->delete();
+            }
+            $port->delete();
+            $transaction->commit();
+                
+            Yii::$app->session->setFlash('success', 'ทำรายการสำเร็จ');
+            
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('error', 'มีบางอย่างผิดพลาด ไม่สามารถทำรายการได้');
+            $transaction->rollBack();
+        }
         return $this->redirect(['index']);
+    }
+    
+    public function actionListDelete($id){
+        $port_list = FundPortList::findOne($id);
+        $redirect = ['fund-port/detail', 'id' => $port_list->fund_port_id];
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $detail = FundPortListDetail::deleteAll(['fund_port_list_id' => $port_list->id]);
+            $port_list->delete();
+            $transaction->commit();
+                
+            Yii::$app->session->setFlash('success', 'ทำรายการสำเร็จ');
+            
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('error', 'มีบางอย่างผิดพลาด ไม่สามารถทำรายการได้');
+            $transaction->rollBack();
+        }
+        return $this->redirect($redirect);
+    }
+    
+    public function actionListDetailDelete($id){
+        $detail = FundPortListDetail::findOne($id);
+        $redirect = ['fund-port/list-detail', 'id' => $detail->fund_port_list_id];
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $detail->delete();
+            $transaction->commit();
+                
+            Yii::$app->session->setFlash('success', 'ทำรายการสำเร็จ');
+            
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('error', 'มีบางอย่างผิดพลาด ไม่สามารถทำรายการได้');
+            $transaction->rollBack();
+        }
+        return $this->redirect($redirect);
     }
 
     /**
@@ -364,13 +415,122 @@ class FundPortController extends AdminLteController
     }
     
     public function actionCalculator($id){
-        $port_list = FundPortList::findOne($id);
-        if(!$port_list){
+        $port = $this->findModel($id);
+        $redirect = Url::to(['detail', 'id' => $id]);
+        if(!$port){
             Yii::$app->session->setFlash('error', 'ไม่พบข้อมูลพอร์ตที่ท่านเลือก');
-            return $this->redirect(['index']);
+            return $this->redirect($redirect);
         }
-        $redirect = Url::to(['detail', 'id' => $port_list->fund_port_id]);
-        Yii::$app->session->setFlash('success', $port_list->fundPort->name);
+        
+        $port_list = FundPortList::find()->where(['fund_port_id' => $id])->all();
+        foreach ($port_list as $list) {
+            //$count_list_detail = FundPortListDetail::find()->where(['fund_port_list_id' => $list->id])->count();
+            $connection = Yii::$app->getDb();
+            $command = $connection->createCommand("
+                SELECT SUM(nav) AS nav, SUM(amount) AS amount, SUM(units) AS units, COUNT(id) AS count_list
+                FROM fund_port_list_detail
+                WHERE fund_port_list_id = $list->id AND type = 1 AND status = 1
+                GROUP BY fund_port_list_id
+                ");
+            $sum = $command->queryOne();
+            //var_dump($sum);exit();
+            $cost_nav = $sum['nav'] / $sum['count_list'];
+            $amount = $sum['amount'];
+            $units = $sum['units'];
+            
+            $cost_value = $amount;
+            
+            $fund = Fund::findOne($list->fund_id);
+            $present_nav = $fund->nav;
+            $present_value = $present_nav * $units;
+            
+            $list->present_value = $present_value;
+            $list->cost_value = $cost_value;
+            $list->present_nav = $present_nav;
+            $list->cost_nav = $cost_nav;
+            $list->units = $units;
+            $list->updated_at = date('Y-m-d H:i:s');
+            $list->save();
+            
+            //var_dump($sum);exit();
+        }
+        
+        Yii::$app->session->setFlash('success', $port->name . ' update success');
         return $this->redirect([$redirect]);
+    }
+    
+    public function actionChart($id){
+        $port = $this->findModel($id);
+        $redirect = Url::to(['detail', 'id' => $id]);
+        if(!$port){
+            Yii::$app->session->setFlash('error', 'ไม่พบข้อมูลพอร์ตที่ท่านเลือก');
+            return $this->redirect($redirect);
+        }
+        
+        $data = $this->setChartData($port);
+        
+        return $this->render('chart', [
+            'port' => $port,
+            'data' => $data
+        ]);
+    }
+    
+    protected function setChartData($port) {
+        $port_list = FundPortList::find()->where(['fund_port_id' => $port->id])->all();
+        $data = [];
+        $data['labels'] = [];
+        $data['datasets'] = [];
+        $data['datasets'][0] = [];
+        $data['datasets'][0]['data'] = [];
+        $data['datasets'][0]['backgroundColor'] = [];
+        
+        $key = 0;
+        foreach ($port_list as $value) {
+            $color = $this->getColor($key);
+            array_push($data['labels'], $value->fund->name);
+            array_push($data['datasets'][0]['data'], $value->present_value);
+            array_push($data['datasets'][0]['backgroundColor'], $color);
+            //$data['labels'] = $value->fund->name;
+            $key++;
+        }
+        return $data;
+    }
+    
+    protected function getColor($index) {
+        //$arr = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'];
+        
+        $arr = ['#003f5c', '#2f4b7c', '#665191', '#a05195', '#d45087', '#f95d6a', '#ff7c43', '#ffa600'];
+        //$arr = [];
+        if(isset($arr[$index])){
+            return $arr[$index];
+        }
+        else{
+            $min = 0;
+            $max = 255;
+            $r = rand($min,$max);
+            $g = rand($min,$max);
+            $b = rand($min,$max);
+            
+            return "rgba($r, $g, $b, 1)";
+        }
+        
+        $backgroundColor = [
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(255, 206, 86, 0.5)',
+                'rgba(75, 192, 192, 0.5)',
+                'rgba(153, 102, 255, 0.5)',
+                'rgba(255, 159, 64, 0.5)'
+        ];
+        $borderColor = [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+        ];
+        
+        return $backgroundColor[$index];
     }
 }

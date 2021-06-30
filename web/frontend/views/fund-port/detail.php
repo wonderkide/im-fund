@@ -14,17 +14,24 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="fund-invest-index">
 
     <p>
+        
+        <?= Html::a('<i class="fa fa-calculator"></i> คำนวณมูลค่า', null, [
+            'class' => 'btn btn-dark activity-confirm-link text-light',
+            'data-title' => 'คำนวณมูลค่า',
+            //'data-url' => Url::to(['fund-port-list-detail/create', 'redirect' => Url::to(['fund-port', 'id' => $port->id])])
+            'data-url' => Url::to(['fund-port/calculator', 'id' => $port->id])
+        ]) ?>
         <?= Html::a('<i class="fa fa-plus-circle"></i> ซื้อกองทุน', null, [
             'class' => 'btn btn-success activity-manage-link text-light',
             'data-title' => 'ซื้อกองทุน',
             //'data-url' => Url::to(['fund-port-list-detail/create', 'redirect' => Url::to(['fund-port', 'id' => $port->id])])
             'data-url' => Url::to(['fund-port/buy', 'id' => $port->id])
         ]) ?>
-        <?= Html::a('<i class="fa fa-calculator"></i> คำนวณมูลค่า', null, [
-            'class' => 'btn btn-dark activity-confirm-link text-light',
-            'data-title' => 'คำนวณมูลค่า',
+        <?= Html::a('<i class="fa fa-list"></i> ดูสัดส่วน', Url::to(['fund-port/chart', 'id' => $port->id]), [
+            'class' => 'btn btn-info text-light',
+            'data-title' => 'ซื้อกองทุน',
             //'data-url' => Url::to(['fund-port-list-detail/create', 'redirect' => Url::to(['fund-port', 'id' => $port->id])])
-            'data-url' => Url::to(['fund-port/calculator', 'id' => $port->id])
+            'data-url' => Url::to(['fund-port/chart', 'id' => $port->id])
         ]) ?>
     </p>
 
@@ -60,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'headerOptions' => ['style' => 'min-width:100px;'],
                 'contentOptions' => ['class' => 'text-center'],
-                'template'=>'{detail} {list-buy} {list-sell}',
+                'template'=>'{detail} {list-buy} {list-sell} {delete}',
                 'buttons'=>[
                     'detail' => function($url,$model,$key){
                         return Html::a('<i class="fas fa-list"></i>', 
@@ -90,6 +97,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'data-url' => $url, 
                                     'data-title' => 'ขาย',
                                     'title' => 'ขาย'
+                                ]);
+                    },
+                    'delete' => function ($url, $model, $key) {
+                        $u_link = Url::to(['fund-port/list-delete', 'id' => $model->id]);
+                        return Html::a('<i class="fas fa-trash"></i>', 
+                                $u_link, 
+                                [
+                                    'class' => '', 
+                                    'data-url' => $u_link, 
+                                    'data-title' => 'Delete',
+                                    'title' => 'Delete',
+                                    'aria-label' => 'Delete',
+                                    'data-pjax' => '0',
+                                    'data-confirm' => 'Are you sure you want to delete this item?',
+                                    //'data-method' => 'post'
                                 ]);
                     }
                 ]

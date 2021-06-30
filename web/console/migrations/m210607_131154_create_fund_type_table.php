@@ -159,7 +159,7 @@ class m210607_131154_create_fund_type_table extends Migration
         //4
         $this->insert('fund_type', [
             'name' => 'ดัชนีสินค้าโภคภัณฑ์',
-            'name_en' => 'Brood Composite Commodities index',
+            'name_en' => 'Broad Composite Commodities index',
             'parent_id' => 4
         ]);
         $this->insert('fund_type', [

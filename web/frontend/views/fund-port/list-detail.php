@@ -2,12 +2,14 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\FundPortListDetailSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'ประวัติ  : ' . $port_list->fund->name;
+$this->params['breadcrumbs'][] = ['label' => $port_list->fundPort->name, 'url' => ['/fund-port', 'id' => $port_list->fund_port_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fund-port-list-detail-index">
@@ -52,6 +54,29 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             //['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'headerOptions' => ['style' => 'min-width:100px;'],
+                'contentOptions' => ['class' => 'text-center'],
+                'template'=>'{delete}',
+                'buttons'=>[
+                    'delete' => function ($url, $model, $key) {
+                        $u_link = Url::to(['fund-port/list-detail-delete', 'id' => $model->id]);
+                        return Html::a('<i class="fas fa-trash"></i>', 
+                                $u_link, 
+                                [
+                                    'class' => '', 
+                                    'data-url' => $u_link, 
+                                    'data-title' => 'Delete',
+                                    'title' => 'Delete',
+                                    'aria-label' => 'Delete',
+                                    'data-pjax' => '0',
+                                    'data-confirm' => 'Are you sure you want to delete this item?',
+                                    //'data-method' => 'post'
+                                ]);
+                    }
+                ]
+            ],
         ],
     ]); ?>
 
