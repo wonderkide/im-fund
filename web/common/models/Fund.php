@@ -37,6 +37,7 @@ use Yii;
  * @property FundType $fundType
  * @property FundTypeIn $fundTypeIn
  * @property int|null $content_status
+ * @property string|null $updated_at
  */
 class Fund extends \yii\db\ActiveRecord
 {
@@ -57,7 +58,7 @@ class Fund extends \yii\db\ActiveRecord
             [['user_id', 'fund_type_id', 'fund_type_in_id', 'asset_management_id', 'risk', 'currency_policy', 'dividend', 'content_status'], 'integer'],
             [['user_id', 'fund_type_id', 'fund_type_in_id', 'asset_management_id','name', 'risk', 'dividend'], 'required'],
             [['frontend_fee', 'backend_fee', 'fee', 'first_invest', 'invest', 'net_asset_value', 'nav'], 'number'],
-            [['registration_date', 'nav_date'], 'safe'],
+            [['registration_date', 'nav_date', 'updated_at'], 'safe'],
             [['detail'], 'string'],
             [['name', 'name_th', 'feeder_fund', 'registration_date_text'], 'string', 'max' => 255],
             [['currency_policy_text'], 'string', 'max' => 512],
@@ -154,5 +155,9 @@ class Fund extends \yii\db\ActiveRecord
             4 => 'ดุลพินิจ	',
         ];
         return $arr;
+    }
+    
+    public function setDecimal4Digit($number){
+        return floor($number * 10000) / 10000;
     }
 }

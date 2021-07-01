@@ -29,7 +29,24 @@ $this->params['breadcrumbs'][] = $this->title;
             
             'name',
             'amount',
-            'profit_amount',
+            //'profit_amount',
+            [
+                'attribute' => 'profit_amount',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    
+                    if($model->profit_amount > 0){
+                        $text = '<span class="text-bold text-success">'.$model->profit_amount.'</span>';
+                    }
+                    elseif($model->profit_amount < 0){
+                        $text = '<span class="text-bold text-danger">'.$model->profit_amount.'</span>';
+                    }
+                    else{
+                        $text = '<span class="text-bold text-dark">'.$model->profit_amount.'</span>';
+                    }
+                    return $text;
+                }
+            ],
             //'created_at',
             'updated_at',
 
@@ -42,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('<i class="fas fa-list"></i>', $url);
                     },
                     'update' => function($url,$model,$key){
-                        return Html::a('<i class="fas fa-pencil-alt"></i>', '#', ['class' => 'activity-create-link', 'data-url' => $url, 'data-title' => 'แก้ไข']);
+                        return Html::a('<i class="fas fa-pencil-alt"></i>', '#', ['class' => 'activity-manage-link', 'data-url' => $url, 'data-title' => 'แก้ไข']);
                     }
                 ]
             ],

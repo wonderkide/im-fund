@@ -20,7 +20,7 @@ class FundPortListSearch extends FundPortList
     {
         return [
             [['id', 'user_id', 'fund_port_id', 'fund_id'], 'integer'],
-            [['present_value', 'cost_value', 'present_nav', 'cost_nav', 'units', 'percent'], 'number'],
+            [['present_value', 'cost_value', 'present_nav', 'cost_nav', 'units', 'percent', 'ratio'], 'number'],
             [['created_at', 'updated_at', 'fund_name'], 'safe'],
         ];
     }
@@ -71,6 +71,7 @@ class FundPortListSearch extends FundPortList
             'cost_nav' => $this->cost_nav,
             'units' => $this->units,
             'percent' => $this->percent,
+            'ratio' => $this->ratio,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);

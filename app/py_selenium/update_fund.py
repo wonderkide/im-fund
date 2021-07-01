@@ -236,14 +236,15 @@ def findFund(fund):
 	if nav_text == '':
 		#nav = driver.find_elements_by_xpath('//*[@id="fund-nav-share"]/div[1]/div/h3')
 		#nav_text = nav[0].text.strip()
-		print('fucking cannot get NAV')
-		driver.close()
-		return
+		#print('fucking cannot get NAV')
+		#driver.close()
+		nav_text = 0
+		#return
 
 	
 
 	print('NAME : ' + name_th_text)
-	print('NAV : ' + nav_text)
+	print('NAV : ' + str(nav_text))
 	print('DATE : ' + nav_date_text)
 	print('TYPE : ' + fund_type_text)
 	print('RISK : ' + str(risk_text))

@@ -58,7 +58,25 @@ $this->params['breadcrumbs'][] = $this->title;
             'present_nav',
             'cost_nav',
             'units',
-            'percent',
+            //'percent',
+            [
+                'attribute' => 'percent',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    
+                    if($model->percent > 0){
+                        $text = '<span class="text-bold text-success">'.$model->percent.'%</span>';
+                    }
+                    elseif($model->percent < 0){
+                        $text = '<span class="text-bold text-danger">'.$model->percent.'%</span>';
+                    }
+                    else{
+                        $text = '<span class="text-bold text-dark">'.$model->percent.'%</span>';
+                    }
+                    return $text;
+                }
+            ],
+            'ratio',
             //'created_at',
             'updated_at',
 

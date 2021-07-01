@@ -270,6 +270,7 @@ class FundPortController extends AdminLteController
                     $port_list->save();
                 }
                 $unit = $model->amount / $model->nav;
+                $unit = Fund::setDecimal4Digit($unit);
                 $model->user_id = $user_id;
                 $model->fund_port_list_id = $port_list->id;
                 $model->units = $unit;
@@ -324,7 +325,7 @@ class FundPortController extends AdminLteController
         $redirect = Url::to(['detail', 'id' => $port_list->fund_port_id]);
         
         $model = new BuyForm();
-        $model->fund_id = $id;
+        $model->fund_id = $port_list->fund_id;
         
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -338,6 +339,7 @@ class FundPortController extends AdminLteController
                 //$port_list = FundPortList::find()->where(['user_id' => $user_id, 'fund_port_id' => $port->id, 'fund_id' => $model->fund_id])->one();
 
                 $unit = $model->amount / $model->nav;
+                $unit = Fund::setDecimal4Digit($unit);
                 $model->user_id = $user_id;
                 $model->fund_port_list_id = $port_list->id;
                 $model->units = $unit;
@@ -389,6 +391,7 @@ class FundPortController extends AdminLteController
                 //$port_list = FundPortList::find()->where(['user_id' => $user_id, 'fund_port_id' => $port->id, 'fund_id' => $model->fund_id])->one();
 
                 $unit = $model->amount / $model->nav;
+                $unit = Fund::setDecimal4Digit($unit);
                 $model->user_id = $user_id;
                 $model->fund_port_list_id = $port_list->id;
                 $model->units = $unit;
@@ -435,6 +438,7 @@ class FundPortController extends AdminLteController
             $sum = $command->queryOne();
             //var_dump($sum);exit();
             $cost_nav = $sum['nav'] / $sum['count_list'];
+            $cost_nav = Fund::setDecimal4Digit($cost_nav);
             $amount = $sum['amount'];
             $units = $sum['units'];
             
@@ -443,16 +447,40 @@ class FundPortController extends AdminLteController
             $fund = Fund::findOne($list->fund_id);
             $present_nav = $fund->nav;
             $present_value = $present_nav * $units;
+            $present_value = Fund::setDecimal4Digit($present_value);
+            
+            $percent = round((($present_value*100/$cost_value)-100), 2);
             
             $list->present_value = $present_value;
             $list->cost_value = $cost_value;
             $list->present_nav = $present_nav;
             $list->cost_nav = $cost_nav;
             $list->units = $units;
+            $list->percent = $percent;
             $list->updated_at = date('Y-m-d H:i:s');
             $list->save();
             
             //var_dump($sum);exit();
+        }
+        
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand("
+            SELECT SUM(present_value) AS present_value, SUM(cost_value) AS cost_value
+            FROM fund_port_list
+            WHERE fund_port_id = $id 
+            ");
+        $sum = $command->queryOne();
+        
+        $sum_cost = $sum['cost_value'];
+        $sum_present = $sum['present_value'];
+        $port->amount = $sum_cost;
+        $port->profit_amount = $sum_present-$sum_cost;
+        $port->updated_at = date('Y-m-d H:i:s');
+        $port->save();
+        foreach ($port_list as $list) {
+            $avg = $list->present_value * 100 / $sum_present;
+            $list->ratio = $avg;
+            $list->save();
         }
         
         Yii::$app->session->setFlash('success', $port->name . ' update success');
@@ -486,9 +514,10 @@ class FundPortController extends AdminLteController
         
         $key = 0;
         foreach ($port_list as $value) {
+            $set = $value->ratio ? $value->ratio:$value->present_value;
             $color = $this->getColor($key);
             array_push($data['labels'], $value->fund->name);
-            array_push($data['datasets'][0]['data'], $value->present_value);
+            array_push($data['datasets'][0]['data'], $set);
             array_push($data['datasets'][0]['backgroundColor'], $color);
             //$data['labels'] = $value->fund->name;
             $key++;

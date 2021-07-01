@@ -17,6 +17,7 @@ use Yii;
  * @property float $cost_nav
  * @property float|null $units
  * @property float|null $percent
+ * @property float|null $ratio
  * @property string $created_at
  * @property string|null $updated_at
  *
@@ -42,7 +43,7 @@ class FundPortList extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'fund_port_id', 'fund_id'], 'integer'],
-            [['present_value', 'cost_value', 'present_nav', 'cost_nav', 'units', 'percent'], 'number'],
+            [['present_value', 'cost_value', 'present_nav', 'cost_nav', 'units', 'percent', 'ratio'], 'number'],
             [['created_at'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
             [['fund_id'], 'exist', 'skipOnError' => true, 'targetClass' => Fund::className(), 'targetAttribute' => ['fund_id' => 'id']],
@@ -67,6 +68,7 @@ class FundPortList extends \yii\db\ActiveRecord
             'cost_nav' => 'Nav ต้นทุน',
             'units' => 'จำนวนหน่อย',
             'percent' => 'เปอร์เซ็น',
+            'ratio' => 'สัดส่วน',
             'created_at' => 'สร้างเมื่อ',
             'updated_at' => 'อัพเดทเมื่อ',
         ];
