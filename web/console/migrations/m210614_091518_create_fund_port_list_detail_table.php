@@ -17,6 +17,7 @@ class m210614_091518_create_fund_port_list_detail_table extends Migration
             'user_id' => $this->integer()->null(),
             'fund_port_list_id' => $this->integer()->null(),
             'date' => $this->date()->notNull(),
+            'sale_date' => $this->date()->null(),
             'nav' => $this->double()->notNull(),
             'amount' => $this->double()->notNull(),
             'units' => $this->double()->notNull(),

@@ -18,7 +18,7 @@ class UserSearch extends UserModel
     {
         return [
             [['id', 'status'], 'integer'],
-            [['username', 'fullname', 'phone', 'email', 'detail', 'auth_key', 'password_hash', 'password_reset_token', 'verification_token', 'created_at', 'updated_at'], 'safe'],
+            [['username', 'fullname', 'phone', 'detail', 'auth_key', 'password_hash', 'password_reset_token', 'verification_token', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -67,7 +67,6 @@ class UserSearch extends UserModel
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'fullname', $this->fullname])
             ->andFilterWhere(['like', 'phone', $this->phone])
-            ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'detail', $this->detail])
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])
             ->andFilterWhere(['like', 'password_hash', $this->password_hash])

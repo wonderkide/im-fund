@@ -8,6 +8,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use frontend\components\MyController;
+use frontend\models\SignupForm;
 
 /**
  * Site controller
@@ -125,10 +126,10 @@ class SiteController extends MyController
         if(Yii::$app->request->post()){
             $model = new SignupForm();
             $model->username = Yii::$app->request->post('username');
-            $model->email = Yii::$app->request->post('email');
+            //$model->email = Yii::$app->request->post('email');
             $model->password = Yii::$app->request->post('password');
             $model->re_password = Yii::$app->request->post('repassword');
-            $model->verifyCode = Yii::$app->request->post('verification');
+            //$model->verifyCode = Yii::$app->request->post('verification');
             if(Yii::$app->request->post('agree') && Yii::$app->request->post('agree')==1){
                 $model->agree_rule = 1;
             }

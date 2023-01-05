@@ -11,6 +11,7 @@ use Yii;
  * @property int|null $user_id
  * @property int|null $fund_port_list_id
  * @property string $date
+ * @property string $sale_date
  * @property float $nav
  * @property float $amount
  * @property float $units
@@ -41,7 +42,7 @@ class BuyForm extends \yii\db\ActiveRecord
         return [
             [['user_id', 'fund_port_list_id', 'type', 'status', 'fund_id'], 'integer'],
             [['date', 'nav', 'amount', 'units', 'created_at', 'type'], 'required'],
-            [['date', 'created_at'], 'safe'],
+            [['date', 'sale_date', 'created_at'], 'safe'],
             [['nav', 'amount', 'units'], 'number'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['fund_port_list_id'], 'exist', 'skipOnError' => true, 'targetClass' => FundPortList::className(), 'targetAttribute' => ['fund_port_list_id' => 'id']],

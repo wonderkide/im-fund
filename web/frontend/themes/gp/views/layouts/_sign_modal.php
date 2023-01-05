@@ -64,11 +64,15 @@ use app\components\widgets\rules;
 						<span class="cd-error-message">Error message here!</span>
 					</p>
 
+                                        <?php /*
 					<p class="fieldset">
 						<label class="image-replace cd-email" for="signup-email">E-mail</label>
 						<input class="full-width has-padding has-border" id="signup-email" type="email" placeholder="E-mail">
 						<span class="cd-error-message">Error message here!</span>
 					</p>
+                                         * 
+                                         */
+                                        ?>
 
 					<p class="fieldset">
 						<label class="image-replace cd-password" for="signup-password">Password</label>
@@ -84,6 +88,7 @@ use app\components\widgets\rules;
 						<span class="cd-error-message">Error message here!</span>
 					</p>
                                         
+                                        <?php /*
                                         <p class="fieldset">
                                             <?php echo Captcha::widget([
                                                 'name' => 'captcha',
@@ -106,6 +111,9 @@ use app\components\widgets\rules;
 						<a href="#0" class="hide-password">Hide</a>-->
 						<span class="cd-error-message">Error message here!</span>
 					</p>
+                                         * 
+                                         */
+                                        ?>
 
 					<p class="fieldset">
 						<input type="checkbox" id="signup-agree" value="0">

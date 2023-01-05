@@ -134,8 +134,14 @@ class FundController extends AdminLteController
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'อัพเดทข้อมูลสำเร็จ');
+            }
+            else{
+                Yii::$app->session->setFlash('error', 'ไม่สามารถทำรายการได้');
+            }
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
@@ -178,15 +184,15 @@ class FundController extends AdminLteController
         $out = ['results' => ['id' => '', 'text' => '']];
         if (!is_null($q)) {
             $query = new Query;
-            $query->select('id, name AS text')
+            $query->select('id, symbol AS text')
                 ->from('fund')
-                ->where(['like', 'name', $q])
+                ->where(['like', 'symbol', $q])
                 ->limit(20);
             $command = $query->createCommand();
             $data = $command->queryAll();
             $out['results'] = array_values($data);
         } elseif ($id > 0) {
-            $out['results'] = ['id' => $id, 'text' => Fund::find($id)->name];
+            $out['results'] = ['id' => $id, 'text' => Fund::find($id)->symbol];
         }
         return $out;
     }

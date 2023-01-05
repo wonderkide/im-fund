@@ -53,6 +53,18 @@ return [
                 ],
             ],
         ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'sourcePath' => null,
+                    'basePath' => '@webroot',
+                    'baseUrl' => '@web',
+                    'js' => [
+                        '/js/jquery.js',
+                    ]
+                ],
+            ],
+        ],
     ],
     'params' => $params,
     'aliases' => [

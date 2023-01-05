@@ -15,7 +15,7 @@ use kartik\date\DatePicker;
 
 $l = null;
 if($model->fund_id){
-    $l = Fund::findOne($model->fund_id)->name;
+    $l = Fund::findOne($model->fund_id)->symbol;
 }
 ?>
 

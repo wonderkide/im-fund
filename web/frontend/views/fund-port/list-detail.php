@@ -8,7 +8,7 @@ use yii\helpers\Url;
 /* @var $searchModel common\models\FundPortListDetailSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'ประวัติ  : ' . $port_list->fund->name;
+$this->title = 'ประวัติ  : ' . $port_list->fund->symbol;
 $this->params['breadcrumbs'][] = ['label' => $port_list->fundPort->name, 'url' => ['/fund-port', 'id' => $port_list->fund_port_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

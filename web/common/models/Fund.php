@@ -8,11 +8,14 @@ use Yii;
  * This is the model class for table "fund".
  *
  * @property int $id
- * @property int|null $user_id
+ * @property int|null $proj_id
  * @property int|null $fund_type_id
  * @property int|null $fund_type_in_id
  * @property int|null $asset_management_id
- * @property string $name
+ * @property string|null $fund_connext_id
+ * @property string|null $amc_id
+ * @property string|null $symbol
+ * @property string|null $name_en
  * @property string|null $name_th
  * @property float|null $nav
  * @property string|null $nav_date
@@ -55,12 +58,12 @@ class Fund extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'fund_type_id', 'fund_type_in_id', 'asset_management_id', 'risk', 'currency_policy', 'dividend', 'content_status'], 'integer'],
-            [['user_id', 'fund_type_id', 'fund_type_in_id', 'asset_management_id','name', 'risk', 'dividend'], 'required'],
+            [['fund_type_id', 'fund_type_in_id', 'asset_management_id', 'risk', 'currency_policy', 'dividend', 'content_status'], 'integer'],
+            [[/*'fund_type_id', 'fund_type_in_id',*/ 'asset_management_id'/*, 'dividend'*/], 'required'],
             [['frontend_fee', 'backend_fee', 'fee', 'first_invest', 'invest', 'net_asset_value', 'nav'], 'number'],
             [['registration_date', 'nav_date', 'updated_at'], 'safe'],
             [['detail'], 'string'],
-            [['name', 'name_th', 'feeder_fund', 'registration_date_text'], 'string', 'max' => 255],
+            [['name_en', 'name_th', 'feeder_fund', 'registration_date_text', 'symbol', 'amc_id', 'proj_id', 'fund_connext_id'], 'string', 'max' => 255],
             [['currency_policy_text'], 'string', 'max' => 512],
             
             [['asset_management_id'], 'exist', 'skipOnError' => true, 'targetClass' => AssetManagement::className(), 'targetAttribute' => ['asset_management_id' => 'id']],
@@ -80,8 +83,11 @@ class Fund extends \yii\db\ActiveRecord
             'fund_type_id' => 'ประเภท',
             'fund_type_in_id' => 'ประเภทกองทุน',
             'asset_management_id' => 'บลจ.',
-            'name' => 'รหัสกองทุน',
+            'symbol' => 'รหัสกองทุน',
+            'name_en' => 'ชื่อกองทุน',
             'name_th' => 'ชื่อกองทุน',
+            'nav' => 'ราคาปัจจุบัน',
+            'nav_date' => 'วันที่อัพเดท',
             'risk' => 'ความเสี่ยง',
             'feeder_fund' => 'Feeder Fund',
             'currency_policy' => 'นโยบายค่าเงิน',

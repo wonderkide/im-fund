@@ -9,8 +9,9 @@ use Yii;
  *
  * @property int $id
  * @property string $name_th
- * @property string|null $name_en
- * @property string|null $code
+ * @property string $name_en
+ * @property string|null $codename
+ * @property string $amc_id
  *
  * @property Fund[] $funds
  */
@@ -30,8 +31,8 @@ class AssetManagement extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name_th'], 'required'],
-            [['name_th', 'name_en', 'code'], 'string', 'max' => 255],
+            [['name_th', 'name_en', 'amc_id'], 'required'],
+            [['name_th', 'name_en', 'codename', 'amc_id'], 'string', 'max' => 255],
         ];
     }
 
@@ -42,9 +43,10 @@ class AssetManagement extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'amc_id' => 'amc_id',
             'name_th' => 'Name Th',
             'name_en' => 'Name En',
-            'code' => 'Code',
+            'codename' => 'Code',
         ];
     }
 

@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use common\models\FundType;
 use common\models\FundTypeIn;
 use common\models\AssetManagement;
+use kartik\datetime\DateTimePicker;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Fund */
@@ -29,6 +30,10 @@ use common\models\AssetManagement;
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'name_th')->textInput(['maxlength' => true]) ?>
+    
+    <?= $form->field($model, 'nav')->textInput(['maxlength' => true]) ?>
+    
+    <?= $form->field($model, 'nav_date')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'risk')->textInput() ?>
 

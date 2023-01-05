@@ -1,3 +1,7 @@
+<?php 
+use yii\helpers\Html;
+?>
+
 <!-- ======= Header ======= -->
 <header id="header" class="fixed-top main-nav-menu">
     <div class="container d-flex align-items-center justify-content-between">
@@ -45,9 +49,9 @@
         </nav><!-- .nav-menu -->
 
         <?php if(Yii::$app->user->isGuest): ?>
-        <a class="get-started-btn scrollto cd-signin" data-target="#SignModal" id="modal-sign">Login / Signup</a>
+        <a class="get-started-btn scrollto cd-signin cursor-pointer" data-target="#SignModal" id="modal-sign">Login / Signup</a>
         <?php else: ?>
-        <a class="get-started-btn scrollto">Logout</a>
+        <?= Html::a('Logout', ['/site/logout'], ['data-method' => 'post', 'class' => 'get-started-btn scrollto']) ?>
         <?php endif; ?>
 
     </div>

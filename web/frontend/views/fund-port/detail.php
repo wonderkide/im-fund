@@ -40,25 +40,61 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'tableOptions' => ['class' => 'table table-striped table-bordered text-center'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
             //'user_id',
             //'fund_port_id',
-            'fund.name',
+            'fund.symbol',
             /*[
                 'attribute' => 'fund_id',
                 'value' => function ($model) {
                     return $model->fund->name;
                 }
             ],*/
-            'present_value',
-            'cost_value',
-            'present_nav',
-            'cost_nav',
-            'units',
+            //'cost_value',
+            //'present_value',
+            [
+                'attribute' => 'cost_value',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return number_format($model->cost_value, 2);
+                }
+            ],
+            [
+                'attribute' => 'present_value',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return number_format($model->present_value, 2);
+                }
+            ],
+                    
+            //'present_nav',
+            //'cost_nav',
+            
             //'percent',
+            [
+                'attribute' => 'profit',
+                //'label' => 'กำไร/ขาดทุน',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    
+                    $amount = $model->profit;
+                    
+                    if($amount > 0){
+                        $text = '<span class="text-bold text-success">'.round($amount).'</span>';
+                    }
+                    elseif($amount < 0){
+                        $text = '<span class="text-bold text-danger">'.round($amount).'</span>';
+                    }
+                    else{
+                        $text = '<span class="text-bold text-dark">'.round($amount).'</span>';
+                    }
+                    return $text;
+                }
+            ],
             [
                 'attribute' => 'percent',
                 'format' => 'raw',
@@ -76,6 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $text;
                 }
             ],
+            'units',
             'ratio',
             //'created_at',
             'updated_at',

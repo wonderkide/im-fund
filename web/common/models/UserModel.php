@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace common\models;
 
 use Yii;
 
@@ -11,7 +11,7 @@ use Yii;
  * @property string $username
  * @property string $fullname
  * @property string|null $phone
- * @property string $email
+ * @property string $img
  * @property string|null $detail
  * @property string|null $auth_key
  * @property string $password_hash
@@ -38,11 +38,11 @@ class UserModel extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['username', 'fullname', 'email', 'password_hash'], 'required'],
+            [['username', 'fullname', 'password_hash'], 'required'],
             [['detail'], 'string'],
             [['status'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['username', 'fullname', 'phone', 'email', 'auth_key', 'password_hash', 'password_reset_token', 'verification_token', 'ip'], 'string', 'max' => 255],
+            [['username', 'fullname', 'phone', 'img', 'auth_key', 'password_hash', 'password_reset_token', 'verification_token', 'ip'], 'string', 'max' => 255],
             [['username'], 'unique'],
         ];
     }

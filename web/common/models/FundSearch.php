@@ -17,8 +17,8 @@ class FundSearch extends Fund
     public function rules()
     {
         return [
-            [['id', 'user_id', 'fund_type_id', 'fund_type_in_id', 'asset_management_id', 'risk', 'currency_policy', 'dividend'], 'integer'],
-            [['name', 'name_th', 'feeder_fund', 'registration_date', 'detail'], 'safe'],
+            [['id', 'fund_type_id', 'fund_type_in_id', 'asset_management_id', 'risk', 'currency_policy', 'dividend'], 'integer'],
+            [['name_en', 'name_th', 'feeder_fund', 'registration_date', 'detail', 'amc_id', 'proj_id', 'symbol', 'fund_connext_id'], 'safe'],
             [['frontend_fee', 'backend_fee', 'fee', 'first_invest', 'invest', 'net_asset_value'], 'number'],
         ];
     }
@@ -60,7 +60,6 @@ class FundSearch extends Fund
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_id' => $this->user_id,
             'fund_type_id' => $this->fund_type_id,
             'fund_type_in_id' => $this->fund_type_in_id,
             'asset_management_id' => $this->asset_management_id,
@@ -76,7 +75,7 @@ class FundSearch extends Fund
             'net_asset_value' => $this->net_asset_value,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
+        $query->andFilterWhere(['like', 'name_en', $this->name_en])
             ->andFilterWhere(['like', 'name_th', $this->name_th])
             ->andFilterWhere(['like', 'feeder_fund', $this->feeder_fund])
             ->andFilterWhere(['like', 'detail', $this->detail]);

@@ -18,7 +18,7 @@ class AssetManagementSearch extends AssetManagement
     {
         return [
             [['id'], 'integer'],
-            [['name_th', 'name_en', 'code'], 'safe'],
+            [['name_th', 'name_en', 'codename', 'amc_id'], 'safe'],
         ];
     }
 
@@ -59,11 +59,12 @@ class AssetManagementSearch extends AssetManagement
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'amc_id' => $this->amc_id
         ]);
 
         $query->andFilterWhere(['like', 'name_th', $this->name_th])
             ->andFilterWhere(['like', 'name_en', $this->name_en])
-            ->andFilterWhere(['like', 'code', $this->code]);
+            ->andFilterWhere(['like', 'codename', $this->codename]);
 
         return $dataProvider;
     }

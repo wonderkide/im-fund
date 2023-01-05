@@ -2,12 +2,17 @@
 
 namespace backend\controllers;
 
+use Yii;
 use common\models\UserModel;
 use backend\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
 use yii\filters\AccessControl;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
+use backend\models\AdminRePasswordForm;
 
 /**
  * UserController implements the CRUD actions for UserModel model.
@@ -77,16 +82,24 @@ class UserController extends Controller
     public function actionCreate()
     {
         $model = new UserModel();
+        $model->status = 1;
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
         }
 
-        return $this->render('create', [
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->auth_key = \Yii::$app->security->generateRandomString();
+            $model->password_hash = \Yii::$app->security->generatePasswordHash($model->password_hash);
+            $model->created_at = date('Y-m-d H:i:s');
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'เพิ่มข้อมูลสำเร็จ');
+                return $this->redirect(['index']);
+            }
+        }
+
+        return $this->renderAjax('create', [
             'model' => $model,
         ]);
     }
@@ -102,11 +115,20 @@ class UserController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
         }
 
-        return $this->render('update', [
+        if ($model->load(Yii::$app->request->post())) {
+            $model->updated_at = date('Y-m-d H:i:s');
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'อัพเดทข้อมูลสำเร็จ');
+                return $this->redirect(['index']);
+            }
+        }
+
+        return $this->renderAjax('update', [
             'model' => $model,
         ]);
     }
@@ -139,5 +161,30 @@ class UserController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    
+    public function actionChangePassword($id)
+    {
+        
+        $model = new AdminRePasswordForm();
+        $admin = $this->findModel($id);
+        
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $admin->password_hash = \Yii::$app->security->generatePasswordHash($model->password);
+            if($admin->save()){
+                Yii::$app->session->setFlash('success', 'อัพเดทข้อมูลสำเร็จ');
+                return $this->redirect(['index']);
+            }
+        }
+
+        return $this->renderAjax('change-password', [
+            'model' => $model,
+            'admin' => $admin,
+        ]);
     }
 }

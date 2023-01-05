@@ -10,6 +10,7 @@ use yii\helpers\Html;
         <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
+        <?php /*
         <li class="nav-item d-none d-sm-inline-block">
             <a href="<?=\yii\helpers\Url::home()?>" class="nav-link">Home</a>
         </li>
@@ -50,8 +51,12 @@ use yii\helpers\Html;
                 <!-- End Level two -->
             </ul>
         </li>
+         * 
+         */
+        ?>
     </ul>
 
+    <?php /*
     <!-- SEARCH FORM -->
     <form class="form-inline ml-3">
         <div class="input-group input-group-sm">
@@ -63,9 +68,13 @@ use yii\helpers\Html;
             </div>
         </div>
     </form>
+     * 
+     */
+    ?>
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
+        <?php /*
         <!-- Navbar Search -->
         <li class="nav-item">
             <a class="nav-link" data-widget="navbar-search" href="#" role="button">
@@ -87,7 +96,12 @@ use yii\helpers\Html;
                 </form>
             </div>
         </li>
+         * 
+         */
+        ?>
 
+        
+        <?php /*
         <!-- Messages Dropdown Menu -->
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
@@ -146,6 +160,12 @@ use yii\helpers\Html;
                 <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
             </div>
         </li>
+         * 
+         */
+        ?>
+        
+        
+        <?php /*
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
@@ -173,9 +193,15 @@ use yii\helpers\Html;
                 <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
             </div>
         </li>
+         * 
+         */
+        ?>
+        
         <li class="nav-item">
             <?= Html::a('<i class="fas fa-sign-out-alt"></i>', ['/site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
         </li>
+        
+        <?php /*
         <li class="nav-item">
             <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                 <i class="fas fa-expand-arrows-alt"></i>
@@ -186,6 +212,9 @@ use yii\helpers\Html;
                 <i class="fas fa-th-large"></i>
             </a>
         </li>
+         * 
+         */
+        ?>
     </ul>
 </nav>
 <!-- /.navbar -->

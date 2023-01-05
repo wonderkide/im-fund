@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="card">
     <div class="card-header">
-        <h5 class="text-bold mb-0">จัดการผู้ใช้งาน</h5>
+        <h5 class="text-bold mb-0">จัดการผู้ดูแลระบบ</h5>
         </div>
     <div class="card-body">
 <div class="admin-index">
@@ -22,10 +22,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <!--<h1><?= Html::encode($this->title) ?></h1>-->
 
     <p>
-        <?php /*echo Html::a('เพิ่มผู้ใช้งาน', null, [
+        <?php echo Html::a('<i class="fa fa-plus"></i>  เพิ่มผู้ดูแลระบบ', null, [
             'class' => 'btn btn-success activity-create-link text-light',
             'data-title' => 'เพิ่มผู้ใช้งาน',
-        ])*/ ?>
+        ]) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

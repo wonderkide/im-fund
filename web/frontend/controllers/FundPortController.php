@@ -277,6 +277,15 @@ class FundPortController extends AdminLteController
                 $model->created_at = date('Y-m-d H:i:s');
                 $model->type = 1;
                 $model->status = 1;
+                
+                $fund = Fund::findOne($model->fund_id);
+                if($fund->fund_type_in_id == 4){
+                    //$date_totime = strtotime($model->date);
+                    //$Y = date('Y', $date_totime);
+                    //$futureY = ((int)$Y)+10;
+                    $sale_date = date('Y-m-d', strtotime($model->date. ' + 10 years'));
+                    $model->sale_date = $sale_date;
+                }
                 $model->save();
                 
                 $transaction->commit();
@@ -285,6 +294,7 @@ class FundPortController extends AdminLteController
                 return $this->redirect($redirect);
                 
             } catch (\Exception $e) {
+                var_dump($e);exit();
                 Yii::$app->session->setFlash('error', 'มีบางอย่างผิดพลาด ไม่สามารถทำรายการได้');
                 $transaction->rollBack();
                 return $this->redirect($redirect);
@@ -315,6 +325,7 @@ class FundPortController extends AdminLteController
     }
     
     public function actionListBuy($id){
+        //var_dump(1);exit();
         
         $port_list = FundPortList::findOne($id);
         if(!$port_list){
@@ -456,6 +467,7 @@ class FundPortController extends AdminLteController
             $list->present_nav = $present_nav;
             $list->cost_nav = $cost_nav;
             $list->units = $units;
+            $list->profit = $present_value-$cost_value;
             $list->percent = $percent;
             $list->updated_at = date('Y-m-d H:i:s');
             $list->save();
@@ -516,7 +528,7 @@ class FundPortController extends AdminLteController
         foreach ($port_list as $value) {
             $set = $value->ratio ? $value->ratio:$value->present_value;
             $color = $this->getColor($key);
-            array_push($data['labels'], $value->fund->name);
+            array_push($data['labels'], $value->fund->symbol);
             array_push($data['datasets'][0]['data'], $set);
             array_push($data['datasets'][0]['backgroundColor'], $color);
             //$data['labels'] = $value->fund->name;

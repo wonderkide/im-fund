@@ -4,7 +4,7 @@
     padding: 6px 12px;
     margin-left: -1px;
     line-height: 1.42857143;
-    color: #337ab7;
+    color: #007bff;
     text-decoration: none;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -24,8 +24,8 @@
     z-index: 3;
     color: #fff;
     cursor: default;
-    background-color: #337ab7;
-    border-color: #337ab7;
+    background-color: #007bff;
+    border-color: #007bff;
 }
 .pagination > li:last-child > a, .pagination > li:last-child > span {
     border-top-right-radius: 4px;

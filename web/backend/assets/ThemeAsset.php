@@ -14,6 +14,7 @@ class ThemeAsset extends AssetBundle
         'datatables/DataTables-1.10.21/css/jquery.dataTables.min.css',
         'datatables/Responsive-2.2.5/css/responsive.dataTables.min.css',
         'css/main.css',
+        'css/pagination.css',
     ];
     public $js = [
         'datatables/DataTables-1.10.21/js/jquery.dataTables.min.js',

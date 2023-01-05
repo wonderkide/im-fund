@@ -35,11 +35,11 @@ class SignupForm extends Model
             ['username', 'unique', 'targetClass' => 'common\models\User', 'message' => 'Username นี้ถูกใช้ไปแล้ว'],
             ['username', 'string', 'min' => 6, 'max' => 14],
 
-            ['email', 'filter', 'filter' => 'trim'],
-            ['email', 'required', 'message' => 'กรุณากรอก {attribute}'],
-            ['email', 'email', 'message' => 'กรุณากรอกรูปแบบ {attribute} ให้ถูกต้อง'],
-            ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => 'common\models\User', 'message' => 'Email นี้ถูกใช้ไปแล้ว'],
+            //['email', 'filter', 'filter' => 'trim'],
+            //['email', 'required', 'message' => 'กรุณากรอก {attribute}'],
+            //['email', 'email', 'message' => 'กรุณากรอกรูปแบบ {attribute} ให้ถูกต้อง'],
+            //['email', 'string', 'max' => 255],
+            //['email', 'unique', 'targetClass' => 'common\models\User', 'message' => 'Email นี้ถูกใช้ไปแล้ว'],
 
             ['password', 'required', 'message' => 'กรุณากรอก {attribute}'],
             ['password', 'string', 'min' => 8, 'max' => 18],
@@ -47,7 +47,7 @@ class SignupForm extends Model
             ['re_password', 'required', 'message' => 'กรุณากรอก {attribute}'],
             ['re_password','compare','compareAttribute'=>'password', 'message' => 'กรุณากรอก {attribute} ให้ตรงกับ รหัสผ่าน'],
             
-            ['verifyCode', 'captcha'],
+            //['verifyCode', 'captcha'],
             
             //['username', 'allowUser'],
             
@@ -90,16 +90,17 @@ class SignupForm extends Model
         
         $user = new User();
         $user->username = $this->username;
-        $user->email = $this->email;
+        //$user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        $user->generateEmailVerificationToken();
+        //$user->generateEmailVerificationToken();
         
         $user->username = $this->username;
-        $user->email = $this->email;
+        //$user->email = $this->email;
         //$user->phone = $this->phone;
-        //$user->created_at = date('Y-m-d H:i:s');
+        $user->created_at = date('Y-m-d H:i:s');
         $user->ip = Yii::$app->request->getUserIP();
+        $user->status = 1;
 
         if ($user->save()) {
             return $user;
