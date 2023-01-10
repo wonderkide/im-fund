@@ -14,7 +14,7 @@ use yii\web\Response;
 use yii\widgets\ActiveForm;
 use Yii;
 use yii\db\Query;
-use common\components\FinnominaService;
+//use common\components\FinnominaService;
 
 /**
  * FundController implements the CRUD actions for Fund model.
@@ -53,12 +53,38 @@ class FundController extends AdminLteController
         $this->layout = '@app/themes/adminlte3/views/layouts/main';
         return parent::beforeAction($action);
     }
+    
+    public function actionIndex()
+    {
+
+        return $this->render('main', [
+            
+        ]);
+    }
+    
+    public function actionFundList($q = null, $id = null) {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $query = new Query;
+            $query->select('id, symbol AS text')
+                ->from('fund')
+                ->where(['like', 'symbol', $q])
+                ->limit(20);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+        } elseif ($id > 0) {
+            $out['results'] = ['id' => $id, 'text' => Fund::find($id)->symbol];
+        }
+        return $out;
+    }
 
     /**
      * Lists all Admin models.
      * @return mixed
      */
-    public function actionIndex()
+    /*public function actionIndex()
     {
         $searchModel = new FundSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
@@ -69,12 +95,7 @@ class FundController extends AdminLteController
         ]);
     }
 
-    /**
-     * Displays a single Fund model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionView($id)
     {
         return $this->renderAjax('view', [
@@ -82,11 +103,7 @@ class FundController extends AdminLteController
         ]);
     }
 
-    /**
-     * Creates a new Fund model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+
     public function actionCreate()
     {
         $model = new Fund();
@@ -98,14 +115,6 @@ class FundController extends AdminLteController
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
         }
-
-        /*if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
-        }*/
         
         if ($model->load(Yii::$app->request->post())) {
             $model->user_id = Yii::$app->user->id;
@@ -123,13 +132,7 @@ class FundController extends AdminLteController
         ]);
     }
 
-    /**
-     * Updates an existing Fund model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -149,13 +152,7 @@ class FundController extends AdminLteController
         ]);
     }
 
-    /**
-     * Deletes an existing Fund model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -163,13 +160,6 @@ class FundController extends AdminLteController
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Fund model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Fund the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Fund::findOne($id)) !== null) {
@@ -198,11 +188,11 @@ class FundController extends AdminLteController
     }
     
     public function actionPullFund(){
-        /*$service = new FinnominaService();
-        $fund_code = 'TMB-ES-GENOME';
-        $result = $service->getFundDetail($fund_code);
-        var_dump($result);exit();*/
+        //$service = new FinnominaService();
+       // $fund_code = 'TMB-ES-GENOME';
+        //$result = $service->getFundDetail($fund_code);
+        //var_dump($result);exit();
         
-        return $this->render('pt');
-    }
+        //return $this->render('pt');
+    }*/
 }

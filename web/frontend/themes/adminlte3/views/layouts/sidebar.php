@@ -40,8 +40,9 @@ $identity = Yii::$app->user->identity;
             <?php
             echo \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
-                    ['label' => 'รายชื่อกองทุน', 'icon' => 'users', 'url' => ['/fund/index']],
-                    ['label' => 'จัดการพอร์ต', 'icon' => 'users', 'url' => ['/fund-port/index']],
+                    ['label' => 'รวม', 'icon' => 'calculator', 'url' => ['/fund/index']],
+                    //['label' => 'รายชื่อกองทุน', 'icon' => 'users', 'url' => ['/fund/index']],
+                    ['label' => 'จัดการพอร์ต', 'icon' => 'edit', 'url' => ['/fund-port/index']],
                     /*[
                         'label' => 'Starter Pages',
                         'icon' => 'tachometer-alt',

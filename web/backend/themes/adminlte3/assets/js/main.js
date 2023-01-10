@@ -66,18 +66,57 @@ $(document).on('click', '.activity-confirm-link', function(e){
     confirmLink(id,url,text);
 });
 
+$(document).on('click', '.activity-confirm-redirect-link', function(e){ 
+    e.preventDefault();
+    var url = $(this).attr('data-url');
+    var id = $(this).attr('data-id');
+    var text = $(this).attr('data-title');
+    confirmLinkRedirect(id,url,text);
+});
+
+function alertRedirect(msg, url, icon = 'success'){
+    
+    Swal.fire({
+        title: msg,
+        text: false,
+        icon: icon,
+        showCancelButton: false,
+        allowOutsideClick:false,
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'ตกลง'
+        
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location = url;
+        }
+    });
+}
+function alertWarning($msg){
+    Swal.fire({
+        title: $msg,
+        text: false,
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'ตกลง'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            
+        }
+    });
+}
+
 function confirmLink(id,url,text){
     Swal.fire({
         title: text,
         text: false,
-        type: 'warning',
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'ยืนยัน',
         cancelButtonText: 'ยกเลิก',
     }).then((result) => {
-        if (result.value) {
+        if (result.isConfirmed) {
             $('#loading-spinner').modal('show');
             $.get(
                 url,
@@ -92,19 +131,51 @@ function confirmLink(id,url,text){
         }
     });
 }
+function confirmLinkRedirect(id,url,text){
+    Swal.fire({
+        title: text,
+        text: false,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ยืนยัน',
+        cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#loading-spinner').modal('show');
+            $.get(
+                url,
+                {
+                    id: id
+                },
+                function (data)
+                {
+                    $('#loading-spinner').modal('hide');
+                    if(data.status){
+                        alertRedirect(data.message, data.url);
+                    }
+                    else{
+                        alertWarning(data.message);
+                    }
+                }
+            );
+        }
+    });
+}
 
 function confirmDelete(id,url){
     Swal.fire({
         title: 'ยืนยันการลบข้อมูล',
         text: false,
-        type: 'warning',
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'ยืนยัน',
         cancelButtonText: 'ยกเลิก',
     }).then((result) => {
-        if (result.value) {
+        if (result.isConfirmed) {
             $.ajax({
                 method:'POST',
                 url: url,
@@ -120,14 +191,14 @@ function confirmLogout(url){
     Swal.fire({
         title: 'ยืนยันการออกจากระบบ',
         text: false,
-        type: 'warning',
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'ยืนยัน',
         cancelButtonText: 'ยกเลิก',
     }).then((result) => {
-        if (result.value) {
+        if (result.isConfirmed) {
             $.ajax({
                 url: url,
                 success: function (data) {

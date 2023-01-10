@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var common\models\Fund $model */
 
-$this->title = $model->name;
+$this->title = $model->symbol;
 $this->params['breadcrumbs'][] = ['label' => 'Funds', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -34,7 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'fund_type_id',
             'fund_type_in_id',
             'asset_management_id',
-            'name',
+            'symbol',
+            'name_en',
             'name_th',
             'nav',
             'nav_date',

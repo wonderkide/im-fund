@@ -60,6 +60,7 @@ if($model->fund_id){
     <?= $form->field($model, 'nav')->textInput() ?>
 
     <?= $form->field($model, 'amount')->textInput() ?>
+    <?= $form->field($model, 'note')->textarea() ?>
 
     <?php // $form->field($model, 'units')->textInput() ?>
 

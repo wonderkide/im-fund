@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
+use common\models\FundPort;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\FundInvestSearch */
@@ -10,6 +11,8 @@ use yii\helpers\Url;
 
 $this->title = 'พอร์ต : ' . $port->name;
 $this->params['breadcrumbs'][] = $this->title;
+
+$fp = new FundPort();
 ?>
 <div class="fund-invest-index">
 
@@ -29,9 +32,15 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
         <?= Html::a('<i class="fa fa-list"></i> ดูสัดส่วน', Url::to(['fund-port/chart', 'id' => $port->id]), [
             'class' => 'btn btn-info text-light',
-            'data-title' => 'ซื้อกองทุน',
+            'data-title' => 'ดูสัดส่วน',
             //'data-url' => Url::to(['fund-port-list-detail/create', 'redirect' => Url::to(['fund-port', 'id' => $port->id])])
             'data-url' => Url::to(['fund-port/chart', 'id' => $port->id])
+        ]) ?>
+        <?= Html::a('<i class="fa fa-history"></i> ดูประวัติ', Url::to(['fund-port/history', 'id' => $port->id]), [
+            'class' => 'btn bg-orange text-light',
+            'data-title' => 'ดูประวัติ',
+            //'data-url' => Url::to(['fund-port-list-detail/create', 'redirect' => Url::to(['fund-port', 'id' => $port->id])])
+            'data-url' => Url::to(['fund-port/history', 'id' => $port->id])
         ]) ?>
     </p>
 
@@ -39,8 +48,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-striped table-bordered text-center'],
+        'showFooter' => true,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -61,14 +71,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function ($model) {
                     return number_format($model->cost_value, 2);
-                }
+                },
+                'footer' => $fp->getTotalTextNumber($dataProvider->models, 'cost_value'),
             ],
             [
                 'attribute' => 'present_value',
                 'format' => 'raw',
                 'value' => function ($model) {
                     return number_format($model->present_value, 2);
-                }
+                },
+                'footer' => $fp->getTotalTextNumber($dataProvider->models, 'present_value'),
             ],
                     
             //'present_nav',
@@ -93,7 +105,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         $text = '<span class="text-bold text-dark">'.round($amount).'</span>';
                     }
                     return $text;
-                }
+                },
+                'footer' => $fp->getTotalTextColor($dataProvider->models, 'profit'),
             ],
             [
                 'attribute' => 'percent',
@@ -110,7 +123,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         $text = '<span class="text-bold text-dark">'.$model->percent.'%</span>';
                     }
                     return $text;
-                }
+                },
+                'footer' => $fp->getTotalPercentTextColor($dataProvider->models, 'cost_value', 'present_value', null, '%'),
             ],
             'units',
             'ratio',

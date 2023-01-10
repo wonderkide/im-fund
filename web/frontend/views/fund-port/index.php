@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\models\FundPort;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\FundInvestSearch */
@@ -9,6 +10,8 @@ use yii\grid\GridView;
 
 $this->title = 'จัดการพอร์ต';
 $this->params['breadcrumbs'][] = $this->title;
+
+$fp = new FundPort();
 ?>
 <div class="fund-invest-index">
 
@@ -23,29 +26,42 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        'filterModel' => null,
+        'tableOptions' => ['class' => 'table table-striped table-bordered text-center'],
+        'showFooter' => true,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             
             'name',
-            'amount',
+            //'amount',
+            [
+                'attribute' => 'amount',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $amount = number_format($model->amount, 2);
+                    $text = '<span class="text-bold">'.$amount.'</span>';
+                    return $text;
+                },
+                'footer' => $fp->getTotalTextNumber($dataProvider->models, 'amount'),
+            ],
             //'profit_amount',
             [
                 'attribute' => 'profit_amount',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    
+                    $profit = number_format($model->profit_amount, 2);
                     if($model->profit_amount > 0){
-                        $text = '<span class="text-bold text-success">'.$model->profit_amount.'</span>';
+                        $text = '<span class="text-bold text-success">'.$profit.'</span>';
                     }
                     elseif($model->profit_amount < 0){
-                        $text = '<span class="text-bold text-danger">'.$model->profit_amount.'</span>';
+                        $text = '<span class="text-bold text-danger">'.$profit.'</span>';
                     }
                     else{
-                        $text = '<span class="text-bold text-dark">'.$model->profit_amount.'</span>';
+                        $text = '<span class="text-bold text-dark">'.$profit.'</span>';
                     }
                     return $text;
-                }
+                },
+                'footer' => $fp->getTotalTextColor($dataProvider->models, 'profit_amount'),
             ],
             //'created_at',
             'updated_at',
@@ -62,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('<i class="fas fa-pencil-alt"></i>', '#', ['class' => 'activity-manage-link', 'data-url' => $url, 'data-title' => 'แก้ไข']);
                     }
                 ]
-            ],
+            ],          
         ],
     ]); ?>
 

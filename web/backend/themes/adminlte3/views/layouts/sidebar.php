@@ -46,6 +46,15 @@
                             ['label' => 'Fund', 'url' => ['fund/index'], 'iconStyle' => 'far'],
                         ]
                     ],
+                    [
+                        'label' => 'Services',
+                        'icon' => 'cogs',
+                        'items' => [
+                            ['label' => 'service', 'url' => ['service/index'], 'icon' => 'cog'],
+                            ['label' => 'Log', 'url' => ['service-log/index'], 'icon' => 'list'],
+                        ]
+                    ],
+                    //['label' => 'Service', 'icon' => 'cog', 'url' => ['/service-log/index']],
                     ['label' => 'Admin', 'icon' => 'users', 'url' => ['/admin/index']],
                     /*['label' => 'Simple Link', 'icon' => 'th', 'badge' => '<span class="right badge badge-danger">New</span>'],
                     ['label' => 'Yii2 PROVIDED', 'header' => true],

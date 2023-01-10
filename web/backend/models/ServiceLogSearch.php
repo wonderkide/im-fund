@@ -1,15 +1,15 @@
 <?php
 
-namespace common\models;
+namespace backend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\FundPortListDetail;
+use backend\models\ServiceLog;
 
 /**
- * FundPortListDetailSearch represents the model behind the search form of `common\models\FundPortListDetail`.
+ * ServiceLogSearch represents the model behind the search form of `backend\models\ServiceLog`.
  */
-class FundPortListDetailSearch extends FundPortListDetail
+class ServiceLogSearch extends ServiceLog
 {
     /**
      * {@inheritdoc}
@@ -17,9 +17,8 @@ class FundPortListDetailSearch extends FundPortListDetail
     public function rules()
     {
         return [
-            [['id', 'user_id', 'fund_port_list_id', 'type', 'status'], 'integer'],
-            [['date', 'created_at','sale_date', 'note'], 'safe'],
-            [['nav', 'amount', 'units'], 'number'],
+            [['id', 'status'], 'integer'],
+            [['action', 'detail', 'created_at'], 'safe'],
         ];
     }
 
@@ -41,13 +40,13 @@ class FundPortListDetailSearch extends FundPortListDetail
      */
     public function search($params)
     {
-        $query = FundPortListDetail::find();
+        $query = ServiceLog::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['date' => SORT_ASC]],
+            'sort'=> ['defaultOrder' => ['created_at' => SORT_DESC]],
         ]);
 
         $this->load($params);
@@ -61,17 +60,12 @@ class FundPortListDetailSearch extends FundPortListDetail
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'fund_port_list_id' => $this->fund_port_list_id,
-            'date' => $this->date,
-            'nav' => $this->nav,
-            'amount' => $this->amount,
-            'units' => $this->units,
             'created_at' => $this->created_at,
-            'sale_date' => $this->sale_date,
-            'type' => $this->type,
             'status' => $this->status,
         ]);
+
+        $query->andFilterWhere(['like', 'action', $this->action])
+            ->andFilterWhere(['like', 'detail', $this->detail]);
 
         return $dataProvider;
     }

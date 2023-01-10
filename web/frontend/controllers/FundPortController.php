@@ -20,6 +20,7 @@ use common\models\FundPortListDetailSearch;
 use common\models\BuyForm;
 use yii\helpers\Url;
 use common\models\Fund;
+use yii\helpers\ArrayHelper;
 
 /**
  * FundInvestController implements the CRUD actions for FundInvest model.
@@ -76,6 +77,7 @@ class FundPortController extends AdminLteController
      */
     public function actionView($id)
     {
+        //var_dump($id);exit();
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -515,6 +517,113 @@ class FundPortController extends AdminLteController
         ]);
     }
     
+    public function actionHistory($id){
+        
+        $port = $this->findModel($id);
+        $redirect = Url::to(['detail', 'id' => $id]);
+        if(!$port){
+            Yii::$app->session->setFlash('error', 'ไม่พบข้อมูลพอร์ตที่ท่านเลือก');
+            return $this->redirect($redirect);
+        }
+        
+        $port_list = FundPortList::find()->where(['fund_port_id' => $id])->all();
+        $port_list_id_all = ArrayHelper::getColumn($port_list, 'id');
+        
+        //var_dump($port_list_id_all);exit();
+        
+        /*$connection = Yii::$app->getDb();
+        $command = $connection->createCommand("
+            SELECT SUM(amount) AS amount, date
+            FROM fund_port_list_detail
+            WHERE fund_port_list_id = 1
+            GROUP BY date
+            ORDER BY date desc");
+
+        $result = $command->queryAll();*/
+        
+        //$detail_d = FundPortListDetail::find()->select('SUM(amount) AS amount, date')->where(['fund_port_list_id' => $port_list_id_all])->orderBy(['date' => SORT_DESC])->groupBy('DATE(date)')->all();
+        //$detail_m = FundPortListDetail::find()->select('SUM(amount) AS amount, date')->where(['fund_port_list_id' => $port_list_id_all])->orderBy(['date' => SORT_DESC])->groupBy('MONTH(date)')->all();
+        //$detail_y = FundPortListDetail::find()->select('SUM(amount) AS amount, date')->where(['fund_port_list_id' => $port_list_id_all])->orderBy(['date' => SORT_DESC])->groupBy('YEAR(date)')->all();
+        
+        //$detail_all = FundPortListDetail::find()->where(['fund_port_list_id' => $port_list_id_all])->orderBy(['date' => SORT_DESC])->all();
+        
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand("
+            SELECT fund_port_list_detail.*
+             , fund.symbol
+            FROM fund_port_list_detail, fund_port_list, fund
+            WHERE fund_port_list_detail.fund_port_list_id = fund_port_list.id AND fund_port_list.fund_id = fund.id
+            
+            ORDER BY fund_port_list_detail.date desc");
+
+        $result = $command->queryAll();
+        
+        $data = $this->sumHistoryData($result);
+
+        //var_dump($data['m']);exit();
+        
+        /*$connection = Yii::$app->getDb();
+        $command = $connection->createCommand("
+            SELECT fund_port_list_detail.*
+             , fund.symbol
+            FROM fund_port_list_detail, fund_port_list, fund
+            WHERE fund_port_list_detail.fund_port_list_id = fund_port_list.id AND fund_port_list.fund_id = fund.id
+            
+            ORDER BY fund_port_list_detail.date desc");
+
+        $result = $command->queryAll();*/
+        
+        
+        return $this->render('history', [
+            'port' => $port,
+            'port_list' => $port_list,
+            'history' => $data
+        ]);
+    }
+    
+    public function actionGetHistory(){
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        
+        $id = Yii::$app->request->get('id');
+        $date= Yii::$app->request->get('date');
+        
+        $port = $this->findModel($id);
+        if(!$port){
+            return ['status' => false, 'data' => ''];
+        }
+        
+        $port_list = FundPortList::find()->where(['fund_port_id' => $id])->all();
+        $port_list_id_all = ArrayHelper::getColumn($port_list, 'id');
+        
+        $arr = implode("','",$port_list_id_all);
+        //return $arr;
+        
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand("
+            SELECT fund_port_list_detail.*
+             , fund.symbol
+            FROM fund_port_list_detail, fund_port_list, fund
+            WHERE fund_port_list_detail.fund_port_list_id = fund_port_list.id AND fund_port_list.fund_id = fund.id
+            AND fund_port_list_id IN ('$arr') AND date = '$date'
+            ORDER BY fund_port_list_detail.date desc");
+
+        $history = $command->queryAll();
+        
+        $text = $this->renderAjax('_history_table', [
+            'history' => $history
+        ]);
+        
+        return ['status' => true, 'data' => $text];
+    }
+    
+    public function actionViewListDetail($id){
+        $list = FundPortListDetail::findOne($id);
+        
+        return $this->renderAjax('view-list-detail',[
+            'model' => $list
+        ]);
+    }
+    
     protected function setChartData($port) {
         $port_list = FundPortList::find()->where(['fund_port_id' => $port->id])->all();
         $data = [];
@@ -573,5 +682,50 @@ class FundPortController extends AdminLteController
         ];
         
         return $backgroundColor[$index];
+    }
+    
+    public function sumHistoryData($data){
+        $detail_d = $detail_m = $detail_y = [];
+        
+        $d = $m = $y = null;
+        foreach ($data as $value) {
+            $totime = strtotime($value['date']);
+            $d_i = $value['date'];
+            $m_i = date('Y-m', $totime);
+            $y_i = date('Y', $totime);
+            
+            if($d != $d_i){
+                $detail_d[$d_i] = [];
+                $detail_d[$d_i]['data'] = [];
+                $detail_d[$d_i]['date'] = $d_i;
+                $detail_d[$d_i]['amount'] = 0;
+            }
+            if($m != $m_i){
+                $detail_m[$m_i] = [];
+                $detail_m[$m_i]['data'] = [];
+                $detail_m[$m_i]['date'] = $m_i;
+                $detail_m[$m_i]['amount'] = 0;
+            }
+            if($y != $y_i){
+                $detail_y[$y_i] = [];
+                $detail_y[$y_i]['data'] = [];
+                $detail_y[$y_i]['date'] = $y_i;
+                $detail_y[$y_i]['amount'] = 0;
+            }
+            
+            $detail_d[$d_i]['amount'] += $value['amount'];
+            $detail_m[$m_i]['amount'] += $value['amount'];
+            $detail_y[$y_i]['amount'] += $value['amount'];
+            
+            array_push($detail_d[$d_i]['data'], $value);
+            array_push($detail_m[$m_i]['data'], $value);
+            array_push($detail_y[$y_i]['data'], $value);
+            
+            $d = $d_i;
+            $m = $m_i;
+            $y = $y_i;
+        }
+        
+        return ['d' => $detail_d, 'm' => $detail_m, 'y' => $detail_y];
     }
 }

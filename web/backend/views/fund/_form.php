@@ -23,8 +23,8 @@ use common\models\AssetManagement;
     <?= $form->field($model, 'fund_type_in_id')->radioList(ArrayHelper::map(FundTypeIn::find()->all(), 'id', 'name')) ?>
 
     <?= $form->field($model, 'asset_management_id')->dropDownList(ArrayHelper::map(AssetManagement::find()->all(), 'id', 'name_en'), ['prompt' => ' -- เลือก -- ']) ?>
-
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'symbol')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'name_en')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'name_th')->textInput(['maxlength' => true]) ?>
 

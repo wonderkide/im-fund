@@ -76,6 +76,7 @@ class FundSearch extends Fund
         ]);
 
         $query->andFilterWhere(['like', 'name_en', $this->name_en])
+                ->andFilterWhere(['like', 'symbol', $this->symbol])
             ->andFilterWhere(['like', 'name_th', $this->name_th])
             ->andFilterWhere(['like', 'feeder_fund', $this->feeder_fund])
             ->andFilterWhere(['like', 'detail', $this->detail]);

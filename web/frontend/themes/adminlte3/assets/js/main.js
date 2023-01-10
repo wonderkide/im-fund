@@ -70,7 +70,7 @@ function confirmLink(id,url,text){
     Swal.fire({
         title: text,
         text: false,
-        type: 'warning',
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
@@ -97,7 +97,7 @@ function confirmDelete(id,url){
     Swal.fire({
         title: 'ยืนยันการลบข้อมูล',
         text: false,
-        type: 'warning',
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
@@ -120,7 +120,7 @@ function confirmLogout(url){
     Swal.fire({
         title: 'ยืนยันการออกจากระบบ',
         text: false,
-        type: 'warning',
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',

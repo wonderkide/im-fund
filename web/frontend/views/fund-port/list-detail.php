@@ -9,7 +9,7 @@ use yii\helpers\Url;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'ประวัติ  : ' . $port_list->fund->symbol;
-$this->params['breadcrumbs'][] = ['label' => $port_list->fundPort->name, 'url' => ['/fund-port', 'id' => $port_list->fund_port_id]];
+$this->params['breadcrumbs'][] = ['label' => $port_list->fundPort->name, 'url' => ['/fund-port/detail', 'id' => $port_list->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fund-port-list-detail-index">
@@ -18,7 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
+        'tableOptions' => ['class' => 'table table-striped table-bordered text-center'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -30,6 +31,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'amount',
             'units',
             'created_at',
+            //'sale_date',
+            [
+                'attribute' => 'sale_date',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $text = '-';
+                    if($model->sale_date){
+                        $text = $model->sale_date;
+                    }
+                    return $text;
+                }
+            ],
             //'type',
             //'status',
             [
@@ -58,8 +71,24 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'headerOptions' => ['style' => 'min-width:100px;'],
                 'contentOptions' => ['class' => 'text-center'],
-                'template'=>'{delete}',
+                'template'=>'{view} {delete}',
                 'buttons'=>[
+                    'view' => function ($url, $model, $key) {
+                        $u_link = Url::to(['fund-port/view-list-detail', 'id' => $model->id]);
+                        return Html::a('<i class="fas fa-list"></i>', 
+                                null, 
+                                [
+                                    'class' => 'activity-manage-link cursor-pointer', 
+                                    'data-url' => $u_link, 
+                                    
+                                    'data-title' => 'Detail',
+                                    //'title' => 'Delete',
+                                    //'aria-label' => 'Delete',
+                                    //'data-pjax' => '0',
+                                    //'data-confirm' => 'Are you sure you want to delete this item?',
+                                    //'data-method' => 'post'
+                                ]);
+                    },
                     'delete' => function ($url, $model, $key) {
                         $u_link = Url::to(['fund-port/list-detail-delete', 'id' => $model->id]);
                         return Html::a('<i class="fas fa-trash"></i>', 

@@ -78,4 +78,61 @@ class FundPort extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+    
+    public static function getTotal($provider, $fieldName)
+    {
+        $total = 0;
+
+        foreach ($provider as $item) {
+            $total += $item[$fieldName];
+        }
+
+        return $total;
+    }
+    
+    public function getTotalTextNumber($provider, $fieldName, $text_before = null, $text_after = null)
+    {
+        $total = $this->getTotal($provider, $fieldName);
+        $number = number_format($total, 2);
+        $text = '<span class="text-bold text-dark">'.$text_before.$number.$text_after.'</span>';
+        return $text;
+    }
+    
+    public function getTotalTextColor($provider, $fieldName, $text_before = null, $text_after = null)
+    {
+        $total = $this->getTotal($provider, $fieldName);
+        $number = number_format($total, 2);
+        if($total > 0){
+            $text = '<span class="text-bold text-success">'.$text_before.$number.$text_after.'</span>';
+        }
+        elseif($total < 0){
+            $text = '<span class="text-bold text-danger">'.$text_before.$number.$text_after.'</span>';
+        }
+        else{
+            $text = '<span class="text-bold text-dark">'.$text_before.$number.$text_after.'</span>';
+        }
+        return $text;
+    }
+    
+    public function getTotalPercentTextColor($provider, $fieldCost, $fieldPresent, $text_before = null, $text_after = null)
+    {
+        $totalCost = $this->getTotal($provider, $fieldCost);
+        $totalPresent = $this->getTotal($provider, $fieldPresent);
+        
+        //$percent = $totalCost * ($totalPresent - $totalCost) / 100;
+        
+        $percent = ($totalPresent - $totalCost) * 100 / $totalCost;
+        
+        $number = number_format($percent, 2);
+        if($percent > 0){
+            $text = '<span class="text-bold text-success">'.$text_before.$number.$text_after.'</span>';
+        }
+        elseif($percent < 0){
+            $text = '<span class="text-bold text-danger">'.$text_before.$number.$text_after.'</span>';
+        }
+        else{
+            $text = '<span class="text-bold text-dark">'.$text_before.$number.$text_after.'</span>';
+        }
+        return $text;
+    }
 }
