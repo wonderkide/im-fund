@@ -297,7 +297,7 @@ class FundPortController extends AdminLteController
                 return $this->redirect($redirect);
                 
             } catch (\Exception $e) {
-                var_dump($e);exit();
+                //var_dump($e);exit();
                 Yii::$app->session->setFlash('error', 'มีบางอย่างผิดพลาด ไม่สามารถทำรายการได้');
                 $transaction->rollBack();
                 return $this->redirect($redirect);
@@ -360,13 +360,13 @@ class FundPortController extends AdminLteController
                 $model->created_at = date('Y-m-d H:i:s');
                 $model->type = 1;
                 $model->status = 1;
-                $model->save();
                 
                 $fund = Fund::findOne($model->fund_id);
                 if($fund->fund_type_in_id == 4){
                     $sale_date = date('Y-m-d', strtotime($model->date. ' + 10 years'));
                     $model->sale_date = $sale_date;
                 }
+                $model->save();
                 
                 $transaction->commit();
                 
