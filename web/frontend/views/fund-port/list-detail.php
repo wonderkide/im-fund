@@ -9,7 +9,7 @@ use yii\helpers\Url;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'ประวัติ  : ' . $port_list->fund->symbol;
-$this->params['breadcrumbs'][] = ['label' => $port_list->fundPort->name, 'url' => ['/fund-port/detail', 'id' => $port_list->id]];
+$this->params['breadcrumbs'][] = ['label' => $port_list->fundPort->name, 'url' => ['/fund-port/detail', 'id' => $port_list->fund_port_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fund-port-list-detail-index">
@@ -30,7 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'nav',
             'amount',
             'units',
-            'created_at',
+            'note',
+            //'created_at',
             //'sale_date',
             [
                 'attribute' => 'sale_date',
@@ -71,17 +72,33 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'headerOptions' => ['style' => 'min-width:100px;'],
                 'contentOptions' => ['class' => 'text-center'],
-                'template'=>'{view} {delete}',
+                'template'=>'{view} {note} {delete}',
                 'buttons'=>[
                     'view' => function ($url, $model, $key) {
                         $u_link = Url::to(['fund-port/view-list-detail', 'id' => $model->id]);
-                        return Html::a('<i class="fas fa-list"></i>', 
+                        return Html::a('<i class="fas fa-eye"></i>', 
                                 null, 
                                 [
                                     'class' => 'activity-manage-link cursor-pointer', 
                                     'data-url' => $u_link, 
                                     
                                     'data-title' => 'Detail',
+                                    //'title' => 'Delete',
+                                    //'aria-label' => 'Delete',
+                                    //'data-pjax' => '0',
+                                    //'data-confirm' => 'Are you sure you want to delete this item?',
+                                    //'data-method' => 'post'
+                                ]);
+                    },
+                            'note' => function ($url, $model, $key) {
+                        $u_link = Url::to(['fund-port/note-list-detail', 'id' => $model->id]);
+                        return Html::a('<i class="fas fa-comment"></i>', 
+                                null, 
+                                [
+                                    'class' => 'activity-manage-link cursor-pointer', 
+                                    'data-url' => $u_link, 
+                                    
+                                    'data-title' => 'Note',
                                     //'title' => 'Delete',
                                     //'aria-label' => 'Delete',
                                     //'data-pjax' => '0',

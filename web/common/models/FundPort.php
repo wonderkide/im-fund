@@ -119,6 +119,10 @@ class FundPort extends \yii\db\ActiveRecord
         $totalCost = $this->getTotal($provider, $fieldCost);
         $totalPresent = $this->getTotal($provider, $fieldPresent);
         
+        if($totalCost == 0){
+            return '<span class="text-bold text-dark">'.$text_before.'0'.$text_after.'</span>';
+        }
+        
         //$percent = $totalCost * ($totalPresent - $totalCost) / 100;
         
         $percent = ($totalPresent - $totalCost) * 100 / $totalCost;

@@ -21,6 +21,7 @@ use common\models\BuyForm;
 use yii\helpers\Url;
 use common\models\Fund;
 use yii\helpers\ArrayHelper;
+use frontend\models\NoteForm;
 
 /**
  * FundInvestController implements the CRUD actions for FundInvest model.
@@ -361,6 +362,12 @@ class FundPortController extends AdminLteController
                 $model->status = 1;
                 $model->save();
                 
+                $fund = Fund::findOne($model->fund_id);
+                if($fund->fund_type_in_id == 4){
+                    $sale_date = date('Y-m-d', strtotime($model->date. ' + 10 years'));
+                    $model->sale_date = $sale_date;
+                }
+                
                 $transaction->commit();
                 
                 Yii::$app->session->setFlash('success', 'ทำรายการสำเร็จ');
@@ -439,6 +446,10 @@ class FundPortController extends AdminLteController
         }
         
         $port_list = FundPortList::find()->where(['fund_port_id' => $id])->all();
+        if(!$port_list){
+            Yii::$app->session->setFlash('error', 'ยังไม่มีข้อมูลกองทุน');
+            return $this->redirect($redirect);
+        }
         foreach ($port_list as $list) {
             //$count_list_detail = FundPortListDetail::find()->where(['fund_port_list_id' => $list->id])->count();
             $connection = Yii::$app->getDb();
@@ -621,6 +632,36 @@ class FundPortController extends AdminLteController
         
         return $this->renderAjax('view-list-detail',[
             'model' => $list
+        ]);
+    }
+    
+    public function actionNoteListDetail($id){
+        $list = FundPortListDetail::findOne($id);
+        
+        $model = new NoteForm();
+        $model->note = $list->note;
+        
+        $redirect = Url::to(['list-detail', 'id' => $list->fund_port_list_id]);
+        
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            $list->note = $model->note;
+            if($list->save()){
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลสำเร็จ');
+                return $this->redirect($redirect);
+            }
+            else{
+                Yii::$app->session->setFlash('error', 'ไม่สามารถบันทึกได้');
+                return $this->redirect($redirect);
+            }
+        }
+        
+        return $this->renderAjax('note-list-detail',[
+            'model' => $model
         ]);
     }
     
