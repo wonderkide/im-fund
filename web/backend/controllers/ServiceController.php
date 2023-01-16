@@ -43,6 +43,7 @@ class ServiceController extends Controller
                 'only' => ['index', 'get-nav-form'],
                 'rules' => [
                     [
+                        'actions' => ['index', 'get-nav-form'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],

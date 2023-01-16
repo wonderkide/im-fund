@@ -5,6 +5,7 @@ ChartAsset::register($this);
 $j_data = json_encode($data);
 
 $this->title = 'สัดส่วนพอร์ต : ' . $port->name;
+$this->params['breadcrumbs'][] = ['label' => $port->name, 'url' => ['/fund-port/detail', 'id' => $port->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
