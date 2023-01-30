@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\switchinput\SwitchInput;
 
 /** @var yii\web\View $this */
 /** @var backend\models\ServiceConfig $model */
@@ -12,13 +13,9 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'setting')->textInput() ?>
-
-    <?= $form->field($model, 'status')->textInput() ?>
+    
+    <?php echo $form->field($model, 'status')->widget(SwitchInput::classname(), []); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
