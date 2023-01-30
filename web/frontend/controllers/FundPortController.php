@@ -22,6 +22,7 @@ use yii\helpers\Url;
 use common\models\Fund;
 use yii\helpers\ArrayHelper;
 use frontend\models\NoteForm;
+use common\components\CalculateService;
 
 /**
  * FundInvestController implements the CRUD actions for FundInvest model.
@@ -393,10 +394,24 @@ class FundPortController extends AdminLteController
             return $this->redirect(['index']);
         }
         
+        $port = FundPort::findOne($port_list->fund_port_id);
+        if(!$port){
+            Yii::$app->session->setFlash('error', 'ไม่พบข้อมูลพอร์ตที่ท่านเลือก');
+            return $this->redirect(['index']);
+        }
+        
+        $service = new CalculateService();
+        
+        $res = $service->calculatePort($port);
+        if(!$res['status']){
+            Yii::$app->session->setFlash('error', 'ไม่สามารถอัพเดทข้อมูลพอร์ตได้ กรุณาลองอัพเดทพอร์ตของท่าน');
+            return $this->redirect(['index']);
+        }
+        
         $redirect = Url::to(['detail', 'id' => $port_list->fund_port_id]);
         
         $model = new BuyForm();
-        $model->fund_id = $id;
+        $model->fund_id = $port_list->fund_id;
         
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -410,11 +425,22 @@ class FundPortController extends AdminLteController
                 $user_id = \Yii::$app->user->id;
                 //$port_list = FundPortList::find()->where(['user_id' => $user_id, 'fund_port_id' => $port->id, 'fund_id' => $model->fund_id])->one();
 
+                
+                
+                
                 $unit = $model->amount / $model->nav;
                 $unit = Fund::setDecimal4Digit($unit);
+                
+                $cos_nav = $port_list->cost_nav;
+                $present_value = $model->amount;
+                $cos_value = $cos_nav * $unit;
+                $cos_value = Fund::setDecimal4Digit($cos_value);
+                
                 $model->user_id = $user_id;
                 $model->fund_port_list_id = $port_list->id;
                 $model->units = $unit;
+                $model->cost_nav = $cos_nav;
+                $model->profit_amount = $present_value - $cos_value;
                 $model->created_at = date('Y-m-d H:i:s');
                 $model->type = 2;
                 $model->status = 1;
@@ -426,6 +452,7 @@ class FundPortController extends AdminLteController
                 return $this->redirect($redirect);
                 
             } catch (\Exception $e) {
+                var_dump($e);exit();
                 Yii::$app->session->setFlash('error', 'มีบางอย่างผิดพลาด ไม่สามารถทำรายการได้');
                 $transaction->rollBack();
                 return $this->redirect($redirect);
@@ -445,70 +472,19 @@ class FundPortController extends AdminLteController
             return $this->redirect($redirect);
         }
         
-        $port_list = FundPortList::find()->where(['fund_port_id' => $id])->all();
-        if(!$port_list){
-            Yii::$app->session->setFlash('error', 'ยังไม่มีข้อมูลกองทุน');
-            return $this->redirect($redirect);
+        $service = new CalculateService();
+        
+        $res = $service->calculatePort($port);
+        if($res['status']){
+            $type = 'success';
+            $message = 'อัพเดทสำเร็จ';
         }
-        foreach ($port_list as $list) {
-            //$count_list_detail = FundPortListDetail::find()->where(['fund_port_list_id' => $list->id])->count();
-            $connection = Yii::$app->getDb();
-            $command = $connection->createCommand("
-                SELECT SUM(nav) AS nav, SUM(amount) AS amount, SUM(units) AS units, COUNT(id) AS count_list
-                FROM fund_port_list_detail
-                WHERE fund_port_list_id = $list->id AND type = 1 AND status = 1
-                GROUP BY fund_port_list_id
-                ");
-            $sum = $command->queryOne();
-            //var_dump($sum);exit();
-            $cost_nav = $sum['nav'] / $sum['count_list'];
-            $cost_nav = Fund::setDecimal4Digit($cost_nav);
-            $amount = $sum['amount'];
-            $units = $sum['units'];
-            
-            $cost_value = $amount;
-            
-            $fund = Fund::findOne($list->fund_id);
-            $present_nav = $fund->nav;
-            $present_value = $present_nav * $units;
-            $present_value = Fund::setDecimal4Digit($present_value);
-            
-            $percent = round((($present_value*100/$cost_value)-100), 2);
-            
-            $list->present_value = $present_value;
-            $list->cost_value = $cost_value;
-            $list->present_nav = $present_nav;
-            $list->cost_nav = $cost_nav;
-            $list->units = $units;
-            $list->profit = $present_value-$cost_value;
-            $list->percent = $percent;
-            $list->updated_at = date('Y-m-d H:i:s');
-            $list->save();
-            
-            //var_dump($sum);exit();
+        else{
+            $type = 'error';
+            $message = 'อัพเดทไม่สำเร็จ';
         }
         
-        $connection = Yii::$app->getDb();
-        $command = $connection->createCommand("
-            SELECT SUM(present_value) AS present_value, SUM(cost_value) AS cost_value
-            FROM fund_port_list
-            WHERE fund_port_id = $id 
-            ");
-        $sum = $command->queryOne();
-        
-        $sum_cost = $sum['cost_value'];
-        $sum_present = $sum['present_value'];
-        $port->amount = $sum_cost;
-        $port->profit_amount = $sum_present-$sum_cost;
-        $port->updated_at = date('Y-m-d H:i:s');
-        $port->save();
-        foreach ($port_list as $list) {
-            $avg = $list->present_value * 100 / $sum_present;
-            $list->ratio = $avg;
-            $list->save();
-        }
-        
-        Yii::$app->session->setFlash('success', $port->name . ' update success');
+        Yii::$app->session->setFlash($type, $port->name . ' ' . $message);
         return $this->redirect([$redirect]);
     }
     
@@ -754,9 +730,16 @@ class FundPortController extends AdminLteController
                 $detail_y[$y_i]['amount'] = 0;
             }
             
-            $detail_d[$d_i]['amount'] += $value['amount'];
-            $detail_m[$m_i]['amount'] += $value['amount'];
-            $detail_y[$y_i]['amount'] += $value['amount'];
+            if($value['type']  == 1){
+                $detail_d[$d_i]['amount'] += $value['amount'];
+                $detail_m[$m_i]['amount'] += $value['amount'];
+                $detail_y[$y_i]['amount'] += $value['amount'];
+            }
+            else{
+                $detail_d[$d_i]['amount'] -= $value['amount'];
+                $detail_m[$m_i]['amount'] -= $value['amount'];
+                $detail_y[$y_i]['amount'] -= $value['amount'];
+            }
             
             array_push($detail_d[$d_i]['data'], $value);
             array_push($detail_m[$m_i]['data'], $value);

@@ -42,6 +42,8 @@ class FundSearch extends Fund
     public function search($params)
     {
         $query = Fund::find();
+        
+        $query->joinWith('assetManagement');
 
         // add conditions that should always apply here
 

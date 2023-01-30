@@ -15,6 +15,8 @@ use Yii;
  * @property float $nav
  * @property float $amount
  * @property float $units
+ * @property float $cost_nav
+ * @property float $profit_amount
  * @property string $note
  * @property string $created_at
  * @property int $type 1=ซื้อ,2=ขาย,3=สับเปลี่ยนเข้า,4=สับเปลี่ยนออก
@@ -42,7 +44,7 @@ class FundPortListDetail extends \yii\db\ActiveRecord
             [['user_id', 'fund_port_list_id', 'type', 'status'], 'integer'],
             [['date', 'nav', 'amount', 'units', 'created_at', 'type'], 'required'],
             [['date', 'sale_date', 'created_at', 'note'], 'safe'],
-            [['nav', 'amount', 'units'], 'number'],
+            [['nav', 'amount', 'units', 'cost_nav', 'profit_amount'], 'number'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['fund_port_list_id'], 'exist', 'skipOnError' => true, 'targetClass' => FundPortList::className(), 'targetAttribute' => ['fund_port_list_id' => 'id']],
         ];

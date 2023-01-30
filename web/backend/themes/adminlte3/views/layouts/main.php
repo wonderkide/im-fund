@@ -47,7 +47,7 @@ ThemeAsset::register($this);
 
     <!-- Main Footer -->
     <?= $this->render('footer') ?>
-    <div id="loading-spinner" class="modal fade loading-spinner" data-backdrop="static" data-keyboard="false" tabindex="-1">
+    <div id="loading-spinner" class="modal loading-spinner" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered text-center" role="document">
             <span class="fa fa-spinner fa-spin fa-3x w-100"></span>
         </div>

@@ -5,6 +5,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use kartik\select2\Select2;
+use common\models\AssetManagement;
+use yii\helpers\ArrayHelper;
 
 /** @var yii\web\View $this */
 /** @var common\models\FundSearch $searchModel */
@@ -33,7 +36,24 @@ $this->params['breadcrumbs'][] = $this->title;
             //'user_id',
             //'fund_type_id',
             //'fund_type_in_id',
-            'asset_management_id',
+            //'asset_management_id',
+            [
+                'attribute' => 'asset_management_id',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $n = $model->assetManagement->name_th;
+                    return $n;
+                },
+                'filter' => Select2::widget([
+                    'name' => 'FundSearch[asset_management_id]',
+                    'value' => $searchModel->asset_management_id,
+                    'data' => ArrayHelper::map(AssetManagement::find()->all(), 'id', 'name_th'),
+                    'options' => ['placeholder' => 'เลือก บลจ.'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ])
+            ],
             'symbol',
             //'name_en',
             'name_th',

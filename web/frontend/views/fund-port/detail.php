@@ -96,13 +96,13 @@ $fp = new FundPort();
                     $amount = $model->profit;
                     
                     if($amount > 0){
-                        $text = '<span class="text-bold text-success">'.round($amount).'</span>';
+                        $text = '<span class="text-bold text-success">'. number_format($amount, 2).'</span>';
                     }
                     elseif($amount < 0){
-                        $text = '<span class="text-bold text-danger">'.round($amount).'</span>';
+                        $text = '<span class="text-bold text-danger">'.number_format($amount, 2).'</span>';
                     }
                     else{
-                        $text = '<span class="text-bold text-dark">'.round($amount).'</span>';
+                        $text = '<span class="text-bold text-dark">'.number_format($amount, 2).'</span>';
                     }
                     return $text;
                 },

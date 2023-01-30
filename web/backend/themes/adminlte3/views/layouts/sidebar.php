@@ -50,7 +50,8 @@
                         'label' => 'Services',
                         'icon' => 'cogs',
                         'items' => [
-                            ['label' => 'service', 'url' => ['service/index'], 'icon' => 'cog'],
+                            ['label' => 'service', 'url' => ['service/index'], 'icon' => 'list'],
+                            ['label' => 'config', 'url' => ['service-config/index'], 'icon' => 'cog'],
                             ['label' => 'Log', 'url' => ['service-log/index'], 'icon' => 'list'],
                         ]
                     ],

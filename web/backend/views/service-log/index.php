@@ -41,7 +41,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'created_at',
-            'status',
+            //'status',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if($model->status){
+                        $status_text = '<span class="text-light bg-success p-1 pl-2 pr-2 rounded">Success</span>';
+                    }
+                    else{
+                        $status_text = '<span class="text-light bg-danger p-1 pl-2 pr-2  rounded">Error</span>';
+                    }
+                    return $status_text;
+                },
+            ],
             /*[
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, ServiceLog $model, $key, $index, $column) {

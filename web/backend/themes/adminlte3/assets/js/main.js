@@ -95,7 +95,7 @@ function alertWarning($msg){
     Swal.fire({
         title: $msg,
         text: false,
-        icon: 'error',
+        icon: 'warning',
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'ตกลง'
     }).then((result) => {

@@ -11,9 +11,10 @@ use yii\helpers\Url;
     <?php $form = ActiveForm::begin([
                     'id' => 'activeForm-date-form',
                     'enableAjaxValidation' => TRUE,
-                    'options' => ['data-pjax' => false],
+                    'options' => ['data-pjax' => false, 'alert' => 'ยืนยันทำรายการ'],
         //'action' => Url::to(['get-fund-nav']),
-        //'method' => 'POST'
+        'method' => 'POST'
+        
         ]); ?>
 
     <?php
@@ -60,7 +61,7 @@ $(document).on("beforeSubmit", "#activeForm-date-form", function(e){
                 url: form.attr('action'),
                 data : form.serialize() + '&valid=1',
                 success: function (data) {
-                    $('#loading-spinner').modal('show');
+                    $('#loading-spinner').modal('hide');
                     if(data.status){
                         alertRedirect(data.message, data.url);
                     }
