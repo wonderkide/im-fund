@@ -400,13 +400,13 @@ class FundPortController extends AdminLteController
             return $this->redirect(['index']);
         }
         
-        $service = new CalculateService();
+        /*$service = new CalculateService();
         
         $res = $service->calculatePort($port);
         if(!$res['status']){
             Yii::$app->session->setFlash('error', 'ไม่สามารถอัพเดทข้อมูลพอร์ตได้ กรุณาลองอัพเดทพอร์ตของท่าน');
             return $this->redirect(['index']);
-        }
+        }*/
         
         $redirect = Url::to(['detail', 'id' => $port_list->fund_port_id]);
         
@@ -440,7 +440,7 @@ class FundPortController extends AdminLteController
                 $model->fund_port_list_id = $port_list->id;
                 $model->units = $unit;
                 $model->cost_nav = $cos_nav;
-                $model->profit_amount = $present_value - $cos_value;
+                $model->profit_amount = Fund::setDecimal4Digit($present_value - $cos_value);
                 $model->created_at = date('Y-m-d H:i:s');
                 $model->type = 2;
                 $model->status = 1;
@@ -474,7 +474,7 @@ class FundPortController extends AdminLteController
         
         $service = new CalculateService();
         
-        $res = $service->calculatePort($port);
+        $res = $service->calculatePortAll($port);
         if($res['status']){
             $type = 'success';
             $message = 'อัพเดทสำเร็จ';

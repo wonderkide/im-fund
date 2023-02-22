@@ -19,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::button('Get Amc', ['class' => 'btn btn-success activity-confirm-redirect-link' ,'data-id' => 0, 'data-title' => 'ยืนยันดึงข้อมูล Amc', 'data-url' => Url::to(['get-amc'])]) ?>
         <?= Html::button('Get Fund Nav', ['class' => 'btn btn-success activity-manage-link' ,'data-id' => 0, 'data-title' => 'ดึงข้อมูล Nav', 'data-url' => Url::to(['get-nav-form'])]) ?>
         <?= Html::button('Calculate Nav', ['class' => 'btn btn-success activity-confirm-redirect-link' ,'data-id' => 0, 'data-title' => 'ยืนยันคำนวน Nav', 'data-url' => Url::to(['calculate-nav'])]) ?>
+        <?= Html::button('Calculate Nav', ['class' => 'btn btn-danger activity-confirm-redirect-link' ,'data-id' => 0, 'data-title' => 'ยืนยันคำนวน Nav ใหม่', 'data-url' => Url::to(['calculate-nav-all'])]) ?>
     </p>
 
 </div>

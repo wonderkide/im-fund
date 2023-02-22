@@ -21,6 +21,7 @@ use Yii;
  * @property string $created_at
  * @property int $type 1=ซื้อ,2=ขาย,3=สับเปลี่ยนเข้า,4=สับเปลี่ยนออก
  * @property int $status 1=ปกติ,0=ลบ
+ * @property int $calculate
  *
  * @property FundPortList $fundPortList
  * @property User $user
@@ -41,7 +42,7 @@ class FundPortListDetail extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'fund_port_list_id', 'type', 'status'], 'integer'],
+            [['user_id', 'fund_port_list_id', 'type', 'status', 'calculate'], 'integer'],
             [['date', 'nav', 'amount', 'units', 'created_at', 'type'], 'required'],
             [['date', 'sale_date', 'created_at', 'note'], 'safe'],
             [['nav', 'amount', 'units', 'cost_nav', 'profit_amount'], 'number'],

@@ -63,6 +63,25 @@ $fp = new FundPort();
                 },
                 'footer' => $fp->getTotalTextColor($dataProvider->models, 'profit_amount'),
             ],
+                        
+            [
+                'attribute' => 'realized',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $profit = number_format($model->realized, 2);
+                    if($model->realized > 0){
+                        $text = '<span class="text-bold text-success">'.$profit.'</span>';
+                    }
+                    elseif($model->realized < 0){
+                        $text = '<span class="text-bold text-danger">'.$profit.'</span>';
+                    }
+                    else{
+                        $text = '<span class="text-bold text-dark">'.$profit.'</span>';
+                    }
+                    return $text;
+                },
+                'footer' => $fp->getTotalTextColor($dataProvider->models, 'realized'),
+            ],
             //'created_at',
             'updated_at',
 

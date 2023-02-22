@@ -245,6 +245,55 @@ class ServiceController extends Controller
         return ['status' => true, 'all' => $all, 'success' => $success, 'error' => $error, 'message' => $message, 'url' => Url::to(['index'])];
     }
     
+    public function actionCalculateNavAll(){
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        
+        $ports = FundPort::find()->all();
+        
+        $all = 0;
+        $success = 0;
+        $error = 0;
+        $message = '';
+        $err_ms = [];
+        
+        $service_config = new ServiceConfig();
+        $config = $service_config->getConfigByName('calculate_port');
+        
+        if($config){
+            if($ports){
+                $all = count($ports);
+                foreach ($ports as $port) {
+                    $cal_stat = $this->calculatorPortAll($port);
+                    if($cal_stat['status']){
+                        $success += 1;
+                    }
+                    else{
+                        $error += 1;
+                        array_push($err_ms, $cal_stat['message']);
+                    }
+                }
+                $message = 'all : ' . $all . ', success : ' .$success . ', error : '. $error;
+
+            }
+            else{
+                $message = 'ไม่มีข้อมูล port';
+            }
+
+            $action = 'calculate-nav';
+            $l_m = [];
+            $l_m['message'] = $message;
+            $l_m['err'] = $err_ms;
+            $log = new ServiceLog();
+            $log->insertLog($action, true, $l_m);
+        }
+        else{
+            $message = 'service ปิดอยู่';
+            return ['status' => false, 'all' => $all, 'success' => $success, 'error' => $error, 'message' => $message, 'url' => Url::to(['index'])];
+        }
+        
+        return ['status' => true, 'all' => $all, 'success' => $success, 'error' => $error, 'message' => $message, 'url' => Url::to(['index'])];
+    }
+    
     private function getFundNav($date){
         $api = new FundApi();
         
@@ -355,12 +404,20 @@ class ServiceController extends Controller
         
         return ['status' => $status, 'data' => $data, 'save' => $save, 'error' => $err, 'message' => $alert_msg, 'url' => Url::to(['index'])];
     }
-
-
+    
     private function calculatorPort($port){
         $service = new CalculateService();
         
-        $res = $service->calculatePort($port);
+        $res = $service->calculatePortAll($port);
+        
+        return ['status' => $res['status'], 'port_id' => $port->id, 'message' => $res['message']];
+    }
+
+
+    private function calculatorPortAll($port){
+        $service = new CalculateService();
+        
+        $res = $service->calculatePortAll($port, true);
         
         return ['status' => $res['status'], 'port_id' => $port->id, 'message' => $res['message']];
     }

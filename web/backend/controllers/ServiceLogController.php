@@ -8,6 +8,10 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use yii\filters\AccessControl;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
+
 /**
  * ServiceLogController implements the CRUD actions for ServiceLog model.
  */
@@ -25,6 +29,15 @@ class ServiceLogController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                    ],
+                ],
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
                     ],
                 ],
             ]

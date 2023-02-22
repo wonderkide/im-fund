@@ -108,6 +108,28 @@ $fp = new FundPort();
                 },
                 'footer' => $fp->getTotalTextColor($dataProvider->models, 'profit'),
             ],
+                        
+            [
+                'attribute' => 'realized',
+                //'label' => 'กำไร/ขาดทุน',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    
+                    $amount = $model->realized;
+                    
+                    if($amount > 0){
+                        $text = '<span class="text-bold text-success">'. number_format($amount, 2).'</span>';
+                    }
+                    elseif($amount < 0){
+                        $text = '<span class="text-bold text-danger">'.number_format($amount, 2).'</span>';
+                    }
+                    else{
+                        $text = '<span class="text-bold text-dark">'.number_format($amount, 2).'</span>';
+                    }
+                    return $text;
+                },
+                'footer' => $fp->getTotalTextColor($dataProvider->models, 'realized'),
+            ],
             [
                 'attribute' => 'percent',
                 'format' => 'raw',

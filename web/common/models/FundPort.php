@@ -12,6 +12,7 @@ use Yii;
  * @property string $name
  * @property float $amount
  * @property float $profit_amount
+ * @property float $realized
  * @property string $created_at
  * @property string|null $updated_at
  *
@@ -36,7 +37,7 @@ class FundPort extends \yii\db\ActiveRecord
         return [
             [['user_id'], 'integer'],
             [['name', 'created_at'], 'required'],
-            [['amount', 'profit_amount'], 'number'],
+            [['amount', 'profit_amount', 'realized'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -53,7 +54,8 @@ class FundPort extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'name' => 'ชื่อพอร์ต',
             'amount' => 'เงินทุน',
-            'profit_amount' => 'กำไร/ขาดทุน',
+            'profit_amount' => 'กำไร/ขาดทุน Unrealized',
+            'realized' => 'กำไร/ขาดทุน Realized',
             'created_at' => 'สร้างเมื่อ',
             'updated_at' => 'อัพเดทเมื่อ',
         ];
