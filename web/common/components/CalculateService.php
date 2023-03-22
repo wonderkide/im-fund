@@ -453,6 +453,24 @@ class CalculateService extends Component {
                         $detail->save();
                     }
                 }
+                else{
+                    $cost_value = $list->cost_value;
+                    $sum_unit = $list->units;
+                    
+                    $present_nav = $fund->nav;
+                    $present_value = $present_nav * $sum_unit;
+                    $present_value = Fund::setDecimal4Digit($present_value);
+                    
+                    $profit = $present_value - $cost_value;
+                    $percent = round((($present_value*100/$cost_value)-100), 2);
+                    
+                    $list->present_value = $present_value;
+                    $list->present_nav = $present_nav;
+                    $list->profit = $profit;
+                    $list->percent = $percent;
+                    $list->updated_at = date('Y-m-d H:i:s');
+                    $list->save();
+                }
                 
             }
 
