@@ -457,6 +457,7 @@ class CalculateService extends Component {
                     $cost_value = $list->cost_value;
                     $sum_unit = $list->units;
                     
+                    $fund = Fund::findOne($list->fund_id);
                     $present_nav = $fund->nav;
                     $present_value = $present_nav * $sum_unit;
                     $present_value = Fund::setDecimal4Digit($present_value);
