@@ -515,6 +515,7 @@ class FundPortController extends AdminLteController
         
         $port_list = FundPortList::find()->where(['fund_port_id' => $id])->all();
         $port_list_id_all = ArrayHelper::getColumn($port_list, 'id');
+        $arr = implode("','",$port_list_id_all);
         
         //var_dump($port_list_id_all);exit();
         
@@ -540,6 +541,7 @@ class FundPortController extends AdminLteController
              , fund.symbol
             FROM fund_port_list_detail, fund_port_list, fund
             WHERE fund_port_list_detail.fund_port_list_id = fund_port_list.id AND fund_port_list.fund_id = fund.id
+            AND fund_port_list_detail.fund_port_list_id IN ('$arr')
             
             ORDER BY fund_port_list_detail.date desc");
 
